@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../res/frameworks/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../../res/icons/MaterialIcons/MaterialIcons.css">
+    <link rel="stylesheet" href="../../res/fonts/Quicksand/Quicksand.css">
+    <title>Users - Jobs</title>
+    <style>
+        * {
+            font-family: Quicksand;
+            user-select: none;
+        }
+
+        .header {
+            height: 60px;
+            width: 100vw;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            background-color: #ffffff;
+        }
+
+        i {
+            font-family: MaterialIconsRound;
+            font-style: normal;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header" style="z-index: 999;">
+        <i class="h4 m-0 mr-3" onclick="window.location.href='../'">arrow_back</i>
+        <div class="h4 m-0">Student Area</div>
+        <div class="flex-grow-1"></div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center"
+        style="min-height: 100vh; background-image: url(../res/jobs.jpg); background-position: center; background-size: cover;">
+        <div class="shadow border p-4 rounded-lg" style="min-width: 300px;max-width: 80vw; background-color: #ffffff; margin:100px 0 ;">
+            <form id="userLoginForm" class="tab">
+                <h3>Login</h3><br>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <br>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100 form-control">Login</button>
+                </div>
+                <br>
+                <div class="form-group text-center">
+                    <a href="#" onclick="javascript:tab('userForgotForm')">Forgot password?</a><br>
+                    <a href="#" onclick="javascript:tab('userSignupForm')">Create an account</a>
+                </div>
+            </form>
+            <form id="userSignupForm" style="display: none;" class="tab">
+                <h3>Create Account</h3><br>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Roll Number</label>
+                            <input type="number" name="rollnumber" class="form-control" placeholder="Enter Roll number">
+                            <small>Roll Number is required as only college students are allowed</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Full Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Phone Number</label>
+                            <input type="tel" class="form-control" placeholder="Enter Phone Number">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Age</label>
+                            <input type="number" name="age" class="form-control" placeholder="Enter Age">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Gender</label>
+                            <select class="form-control">
+                                <option value="">Male</option>
+                                <option value="">Female</option>
+                                <option value="">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Class</label>
+                            <select class="form-control">
+                                <option value="">BBA</option>
+                                <option value="">MBA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100 form-control">Create</button>
+                </div>
+                <br>
+                <div class="form-group text-center">
+                    <a href="#" onclick="javascript:tab('userLoginForm')">Already have an Account</a>
+                </div>
+            </form>
+            <form id="userForgotForm" style="display: none;" class="tab">
+                <h3>Forgot Password</h3><br>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" placeholder="Enter email">
+                    <br>
+                    <small>A verification code will be sent to your Email address to verify its you.</small>
+                </div>
+                <br><br>
+                <div class="form-group">
+                    <button type="submit" onclick="javascript:tab('userForgotNextForm')"
+                        class="btn btn-primary w-100 form-control">Next</button>
+                </div>
+                <br>
+                <div class="form-group text-center">
+                    <a href="#" onclick="javascript:tab('userLoginForm')">Back to Login</a>
+                </div>
+            </form>
+            <form id="userForgotNextForm" style="display: none;" class="tab">
+                <h3>Forgot Password</h3><br>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Verification Code</label>
+                    <input type="number" class="form-control" placeholder="Enter Code">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">New Password</label>
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Confirm New Password</label>
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <br>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100 form-control">Done</button>
+                </div>
+                <div class="form-group text-center">
+                    <a href="#" onclick="javascript:tab('userLoginForm')">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../res/frameworks/jquery/jquery.js"></script>
+    <script>
+        tab("userLoginForm")
+        function tab(id) {
+            $(".tab").hide()
+            $("#" + id).fadeIn(500)
+        }
+    </script>
+</body>
+
+</html>

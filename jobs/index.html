@@ -67,14 +67,15 @@
         }
 
         .jobSearchTitle {
-            font-size: 90px;
+            font-size: 80px;
             margin-bottom: 40px;
             color: #ffffff;
         }
 
         @media screen and (max-width: 500px) {
             .jobSearchTitle {
-                font-size: 60px;
+                font-size: 40px;
+                margin-bottom: 60px;
             }
         }
 
@@ -85,7 +86,7 @@
         }
 
         .mainBack {
-            height: 50vh;
+            height: 70vh;
             min-height: 350px;
             display: flex;
             justify-content: center;
@@ -94,16 +95,51 @@
             background-color: rgba(0, 0, 0, 0);
             flex-direction: column;
         }
+
+        .sideMenu {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            height: 100vh;
+            width: 300px;
+            background-color: #ffffff;
+            z-index: 10;
+            transition: 0.5s;
+        }
+
+        .sideMenuItem {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+            text-decoration: none;
+            color: #303030;
+            font-size: 20px;
+        }
+
+        .sideMenuItem:hover {
+            background-color: #e0e0e0;
+            text-decoration: none;
+            color: #000000;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="header">
-        <i class="h4 m-0 mr-3">menu</i>
+        <i class="h4 m-0 mr-3" onclick="$('.sideMenu').css('left','0')">menu</i>
         <div class="h4 m-0">Jobs by GNDU</div>
         <div class="flex-grow-1"></div>
-        <i class="h2 m-0 text-secondary">account_circle</i>
+        <!--i class="h2 m-0 text-secondary" onclick="window.location.href='profile/'">account_circle</i-->
+    </div>
+
+    <div class="sideMenu shadow-lg">
+        <a href="javascript:$('.sideMenu').css('left','-500px')" class="sideMenuItem"><i
+                class="h4 m-0">arrow_back</i></a>
+        <a href="profile/" class="sideMenuItem">Student Area</a>
+        <a href="#" class="sideMenuItem">Recruiter Area</a>
+        <a href="#" class="sideMenuItem">Contact Us</a>
     </div>
 
     <div class="mainHeadContainer">
@@ -113,7 +149,68 @@
                 <input type="text" class="inputMain m-2" placeholder="Start typing a Job...">
                 <button class="btn btn-primary jobSearchButton" disabled>Search</button>
             </div>
+            <div class="m-5"></div>
         </div>
+    </div>
+    <br><br>
+    <div class="mainHeadContainer" style="background-image: url(res/jobs2.jpg);">
+        <div class="mainBack" style="background-color: rgba(0, 0, 0, 0.2); height: 300px;">
+            <div class="jobSearchTitle">Discover Jobs</div>
+            <button class="btn btn-lg btn-primary shadow" onclick="window.location.href='profile/'">Create account
+                now</button>
+        </div>
+    </div>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="res/back3.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">A Sample Job</h5>
+                        <p class="card-text">Sample job for a sample college
+                            card's content.</p>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Know More</a>
+                        <a href="#" class="card-link">Apply Now</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="res/jobs2.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">One More Sample Job</h5>
+                        <p class="card-text">Sample job for a sample college
+                            card's content.</p>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Know More</a>
+                        <a href="#" class="card-link">Apply Now</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="res/jobs2.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">One More Sample Job</h5>
+                        <p class="card-text">Sample job for a sample college
+                            card's content.</p>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Know More</a>
+                        <a href="#" class="card-link">Apply Now</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <br>
+
     </div>
 
     <script src="../res/frameworks/jquery/jquery.js"></script>
