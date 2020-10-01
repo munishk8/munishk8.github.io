@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../res/frameworks/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../res/icons/MaterialIcons/MaterialIcons.css">
+    <link rel="stylesheet" href="../res/fonts/Quicksand/Quicksand.css">
+    <title>Jobs</title>
+    <style>
+        * {
+            font-family: Quicksand;
+            user-select: none;
+        }
+
+        .header {
+            height: 70px;
+            width: 100vw;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        i {
+            font-family: MaterialIconsRound;
+            font-style: normal;
+            cursor: pointer;
+        }
+
+        .inputMain {
+            border: none;
+            padding: 10px;
+            outline: none;
+            background-color: transparent;
+            width: calc(100% - 90px);
+        }
+
+
+        .jobSearchButton {
+            border-radius: 50px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            height: 50px;
+            border: none;
+            padding: 10px 20px;
+            background-color: #2090f0;
+            color: #ffffff;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .jobSearchWrapper {
+            width: 60vw;
+            min-width: 300px;
+            position: relative;
+            transition: 0.3s;
+            height: 60px;
+            background-color: #ffffff;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .jobSearchTitle {
+            font-size: 90px;
+            margin-bottom: 40px;
+            color: #ffffff;
+        }
+
+        @media screen and (max-width: 500px) {
+            .jobSearchTitle {
+                font-size: 60px;
+            }
+        }
+
+        .mainHeadContainer {
+            background-image: url(res/jobs.jpg);
+            background-position: center;
+            background-size: cover;
+        }
+
+        .mainBack {
+            height: 50vh;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0);
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <i class="h4 m-0 mr-3">menu</i>
+        <div class="h4 m-0">Jobs by GNDU</div>
+        <div class="flex-grow-1"></div>
+        <i class="h2 m-0 text-secondary">account_circle</i>
+    </div>
+
+    <div class="mainHeadContainer">
+        <div class="mainBack">
+            <div class="jobSearchTitle">Find a Job</div>
+            <div class="jobSearchWrapper">
+                <input type="text" class="inputMain m-2" placeholder="Start typing a Job...">
+                <button class="btn btn-primary jobSearchButton" disabled>Search</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../res/frameworks/jquery/jquery.js"></script>
+    <script>
+        $(".inputMain").focus(function () {
+            $(".jobSearchWrapper").css("transform", "scale(1.1)")
+        })
+        $(".inputMain").keyup(function () {
+            if ($(".inputMain").val() == "")
+                $(".jobSearchButton").attr("disabled", true)
+            else
+                $(".jobSearchButton").attr("disabled", false)
+        })
+        $(".inputMain").focusout(function () {
+            $(".jobSearchWrapper").css("transform", "scale(1)")
+        })
+    </script>
+</body>
+
+</html>
