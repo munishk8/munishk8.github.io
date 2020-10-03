@@ -293,15 +293,18 @@
                 <p>(0 Vacancies)</p>
             </div>
         </div>
+        <div class="text-center p-2">
+            <a href="jobs/" class="btn btn-outline-info">Show All Jobs</a>
+        </div>
     </div>
     <style>
         .bgmk {
             padding: 100px 0;
-            background: linear-gradient(135deg, #f2f5f6 42%,#c8d7dc 100%);
+            background: linear-gradient(135deg, #f2f5f6 42%, #c8d7dc 100%);
             clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
         }
     </style>
-    <div class="bgmk">
+    <div>
         <div class="text-center pb-5">
             <div class="h3">Recent Jobs Listings</div>
         </div>
@@ -315,7 +318,7 @@
                         </div>
                         <div class="jobCardTitle">
                             <h5>Sample Job of Sample Company</h5>
-                            <div class="badge badge-danger">Temporary</div>
+                            <div class="badge badge-info">Temporary</div>
                             <small>Posted<span> 5 day </span>ago</small>
                         </div>
                         <div class="jobCardAction">
@@ -377,7 +380,39 @@
                         </div>
                         <div class="jobCardTitle">
                             <h5>Sample Job of Sample Company</h5>
-                            <div class="badge badge-danger">Temporary</div>
+                            <div class="badge badge-info">Temporary</div>
+                            <small>Posted<span> 5 day </span>ago</small>
+                        </div>
+                        <div class="jobCardAction">
+                            <i class="h5">launch</i>
+                        </div>
+                    </div>
+                    <div class="jobCardBody">
+                        <div class="row w-100 m-0">
+
+                            <div class="col-sm-6">
+                                <div><i class="mr-2">account_balance_wallet</i><span>Rs. 20,000 - 25,000</span></div>
+                                <div><i class="mr-2">location_on</i><span>Jalandhar, Punjab</span></div>
+                                <div><i class="mr-2">filter_alt</i><span>Sales & Marketing</span></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div><i class="mr-2">assistant</i><span>Fresher</span></div>
+                                <div><i class="mr-2">pending_actions</i><span>BBA, MBA</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="jobCard">
+                    <div class="jobCardHeader">
+                        <div class="jobCardIcon">
+                            <img src="res/media/companyIcon.png">
+                        </div>
+                        <div class="jobCardTitle">
+                            <h5>Sample Job of Sample Company</h5>
+                            <div class="badge badge-info">Temporary</div>
                             <small>Posted<span> 5 day </span>ago</small>
                         </div>
                         <div class="jobCardAction">
@@ -403,8 +438,43 @@
             </div>
         </div>
         <div class="text-center p-2">
-            <a href="#" class="btn btn-outline-dark">Show All Jobs</a>
+            <a href="jobs/" class="btn btn-outline-secondary">Show All Jobs</a>
         </div>
+    </div>
+
+    <div>
+        <div class="jobCatTab">
+            <div class="text-center pb-5">
+                <div class="h3">Top Companies</div>
+            </div>
+            <div class="row w-100 m-0">
+                <div class="col-sm-6">
+                    <img src="res/media/companyIcon.png">
+                    <h5>Fake & Fake Company</h5>
+                    <p>(0 Jobs)</p>
+                </div>   
+                <div class="col-sm-6">
+                    <img src="res/media/companyIcon.png">
+                    <h5>Bankrupt Company</h5>
+                    <p>(0 Jobs)</p>
+                </div>   
+                <div class="col-sm-6">
+                    <img src="res/media/companyIcon.png">
+                    <h5>Unknown Company</h5>
+                    <p>(0 Jobs)</p>
+                </div>   
+                <div class="col-sm-6">
+                    <img src="res/media/companyIcon.png">
+                    <h5>Robbed Company</h5>
+                    <p>(0 Jobs)</p>
+                </div>   
+            </div>
+
+            <div class="text-center p-2">
+                <a href="jobs/" class="btn btn-outline-secondary">Show All Companies</a>
+            </div>
+        </div>
+
     </div>
 
     <style>
@@ -419,7 +489,7 @@
 
         .jobCard {
             border: 1px solid #dee2e6;
-            background-color: #fafafa;
+            border-radius: 10px;
             padding: 20px;
             margin: 10px 0;
             cursor: pointer;
@@ -428,7 +498,7 @@
 
         .jobCard:hover {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            transform: scale(1.05);
+            transform: scale(1.0);
             z-index: 5;
         }
 
