@@ -4,228 +4,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="res/media/JobsIcon.png" type="image/x-icon">
     <link rel="stylesheet" href="../res/frameworks/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="../res/icons/MaterialIcons/MaterialIcons.css">
     <link rel="stylesheet" href="../res/fonts/Quicksand/Quicksand.css">
+    <link rel="stylesheet" href="../res/icons/MaterialIcons/MaterialIcons.css">
+    <meta name="theme-color" content="#303030">
     <title>Jobs</title>
     <style>
         * {
             font-family: Quicksand;
-            user-select: none;
-        }
-
-        .header {
-            height: 70px;
-            width: 100vw;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
         }
 
         i {
-            font-family: MaterialIconsRound;
             font-style: normal;
-            cursor: pointer;
+            font-family: MaterialIconsRound;
         }
 
-        .inputMain {
-            border: none;
-            padding: 10px;
-            outline: none;
-            background-color: transparent;
-            width: calc(100% - 90px);
+        .mainHeader {
+            width: 100vw;
+            background-image: linear-gradient(57deg, #00c6a7, #1e4d92);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            overflow: visible;
+            padding-bottom: 100px;
         }
 
-
-        .jobSearchButton {
-            border-radius: 50px;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            height: 50px;
-            border: none;
-            padding: 10px 20px;
-            background-color: #2090f0;
-            color: #ffffff;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-
-        .jobSearchWrapper {
-            width: 60vw;
-            min-width: 300px;
-            position: relative;
-            transition: 0.3s;
-            height: 60px;
-            background-color: #ffffff;
-            border-radius: 30px;
+        .mainTopBar {
+            width: 100%;
+            height: 100px;
             display: flex;
             align-items: center;
-            padding-left: 10px;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-
-        .jobSearchTitle {
-            font-size: 80px;
-            margin-bottom: 40px;
             color: #ffffff;
         }
 
-        @media screen and (max-width: 500px) {
-            .jobSearchTitle {
-                font-size: 40px;
-                margin-bottom: 60px;
-            }
+        .mainLogo {
+            min-width: 110px;
+            overflow: hidden;
+            font-size: 30px;
+            margin-left: 10%;
+            display: flex;
+            align-items: center;
         }
 
-        .mainHeadContainer {
-            background-image: url(res/jobs.jpg);
-            background-position: center;
-            background-size: cover;
+        .mainNav {
+            display: flex;
+            padding-right: 5%;
         }
 
-        .mainBack {
-            height: 70vh;
-            min-height: 350px;
+        .mainNav a {
+            color: #ffffff;
+            font-size: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px;
-            background-color: rgba(0, 0, 0, 0);
+            padding: 8px 12px;
+            margin: 4px;
+            transition: .4s;
+            border-radius: 5px;
+        }
+
+        .mainNav a:hover {
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .mainRightSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
             flex-direction: column;
+            padding: 10%;
         }
 
-        .sideMenu {
-            position: fixed;
-            top: 0;
-            left: -400px;
-            height: 100vh;
-            width: 300px;
+        .mainSearchWrapper {
+            margin-top: 50px;
+            width: 90%;
+            position: relative;
+            height: 50px;
+            border-radius: 25px;
             background-color: #ffffff;
-            z-index: 10;
-            transition: 0.5s;
-        }
-
-        .sideMenuItem {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
             display: flex;
             align-items: center;
-            height: 60px;
-            padding: 0 20px;
-            text-decoration: none;
-            color: #303030;
-            font-size: 20px;
+            padding: 25px;
+            transition: .4s;
+
         }
 
-        .sideMenuItem:hover {
-            background-color: #e0e0e0;
-            text-decoration: none;
-            color: #000000;
+        .mainSearchInput {
+            border: none;
+            height: 50px;
+            outline: none;
+            width: calc(100% - 40px);
+        }
+
+        .mainSearchButton {
+            border: none;
+            background-color: #1e4d92;
+            border-radius: 20px;
+            min-width: 40px;
+            height: 40px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: .4s;
+        }
+
+        .mainLeftSection {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mainTopSection {
+            width: 100%;
+            margin: 0;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .jobCatTab {
+            padding: 100px 0;
+            width: 100%;
+            /*
+            margin-top: -5%;
+            height: 100vh;
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);
+            background: rgb(238, 174, 202);
+            background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+            */
+        }
+
+        .jobCatTab .row {
+            padding: 0 10%;
+        }
+
+        .jobCatTab .col-sm-6 {
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .jobCatTab .col-sm-6 img {
+            width: 80px;
+            margin-bottom: 14px;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="header">
-        <i class="h4 m-0 mr-3" onclick="$('.sideMenu').css('left','0')">menu</i>
-        <div class="h4 m-0">Jobs by GNDU</div>
-        <div class="flex-grow-1"></div>
-        <!--i class="h2 m-0 text-secondary" onclick="window.location.href='profile/'">account_circle</i-->
-    </div>
-
-    <div class="sideMenu shadow-lg">
-        <a href="javascript:$('.sideMenu').css('left','-500px')" class="sideMenuItem"><i
-                class="h4 m-0">arrow_back</i></a>
-        <a href="profile/" class="sideMenuItem">Student Area</a>
-        <a href="#" class="sideMenuItem">Recruiter Area</a>
-        <a href="#" class="sideMenuItem">Contact Us</a>
-    </div>
-
-    <div class="mainHeadContainer">
-        <div class="mainBack">
-            <div class="jobSearchTitle">Find a Job</div>
-            <div class="jobSearchWrapper">
-                <input type="text" class="inputMain m-2" placeholder="Start typing a Job...">
-                <button class="btn btn-primary jobSearchButton" disabled>Search</button>
+    <div class="mainHeader">
+        <div class="mainTopBar">
+            <div class="mainLogo">
+                <!--img src="res/media/JobsIcon.png" style="width: 40px;margin-right: 10px;"-->
+                Jobs
             </div>
-            <div class="m-5"></div>
+            <div class="flex-grow-1"></div>
+            <div class="mainNav">
+                <div class="flex-grow-1"></div>
+                <a href="#">Signup</a>
+                <a href="#" class="border">Login</a>
+            </div>
+        </div>
+        <div class="row mainTopSection">
+
+            <div class="col-md-5 mainLeftSection">
+                <div>
+                    <img src="res/media/2518593(2).png" style="width: 100%;padding: 10%;">
+                </div>
+            </div>
+
+            <div class="col-md-7 mainRightSection">
+                <h1>Find a Job</h1>
+                <p class="text-center">A better career is out there. We'll help you find it.</p>
+                <div class="mainSearchWrapper">
+                    <input type="text" class="mainSearchInput" placeholder="Start typing a job...">
+                    <button class="btn mainSearchButton" disabled><i class="text-light">search</i></button>
+                </div>
+            </div>
+
         </div>
     </div>
-    <br><br>
-    <div class="mainHeadContainer" style="background-image: url(res/jobs2.jpg);">
-        <div class="mainBack" style="background-color: rgba(0, 0, 0, 0.2); height: 300px;">
-            <div class="jobSearchTitle">Discover Jobs</div>
-            <button class="btn btn-lg btn-primary shadow" onclick="window.location.href='profile/'">Create account
-                now</button>
+
+    <div class="jobCatTab">
+        <div class="text-center pb-5">
+            <div class="h3">Popular Job Categories</div>
+        </div>
+        <div class="row w-100">
+            <div class="col-sm-6">
+                <img src="res/media/accounting_icon.png">
+                <h5>Accounting</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/marketing_icon.png">
+                <h5>Sales & Marketing</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/automobile_icon.png">
+                <h5>Automative Jobs</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/education_icon.png">
+                <h5>Education Traning</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/healthcare_icon.png">
+                <h5>Health Care</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/restaurant_icon.png">
+                <h5>Food Servie</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/telecom_icon.png">
+                <h5>Telecomunication</h5>
+                <p>(0 Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/construction_icon.png">
+                <h5>Construction</h5>
+                <p>(0 Vacancies)</p>
+            </div>
         </div>
     </div>
-    <div class="container py-5">
+
+    <style>
+        footer {
+            background-color: #404040;
+            color: #ffffff;
+            margin-top: 10%;
+            padding: 10%;
+        }
+
+        footer>div>div {
+            padding: 20px;
+        }
+
+        footer>div>div>a {
+            margin-left: 16px;
+            color: #dddddd;
+            display: block;
+        }
+    </style>
+    <footer>
         <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="res/back3.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">A Sample Job</h5>
-                        <p class="card-text">Sample job for a sample college
-                            card's content.</p>
-                    </div>
-                    <div class="card-body">
-                        <a href="#" class="card-link">Know More</a>
-                        <a href="#" class="card-link">Apply Now</a>
-                    </div>
-                </div>
-                <br>
+            <div class="col-lg-12">
+                <h3>Jobs</h3>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="res/jobs2.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">One More Sample Job</h5>
-                        <p class="card-text">Sample job for a sample college
-                            card's content.</p>
-                    </div>
-                    <div class="card-body">
-                        <a href="#" class="card-link">Know More</a>
-                        <a href="#" class="card-link">Apply Now</a>
-                    </div>
-                </div>
-                <br>
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <a href="#">Phone: +91 123123123</a>
+                <a href="#">Email: munish@munish.ml</a>
+                <a href="#">Address: 123 Jalandhar, Punjab, 144001</a>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="res/jobs2.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">One More Sample Job</h5>
-                        <p class="card-text">Sample job for a sample college
-                            card's content.</p>
-                    </div>
-                    <div class="card-body">
-                        <a href="#" class="card-link">Know More</a>
-                        <a href="#" class="card-link">Apply Now</a>
-                    </div>
-                </div>
-                <br>
+            <div class="col-md-4">
+                <h5>Links</h5>
+                <a href="#">Candidate Area</a>
+                <a href="#">Employer Area</a>
+                <a href="#">Site Admin</a>
+            </div>
+            <div class="col-md-4">
+                <h5>Social Links</h5>
+                <a href="#">Instagram @...</a>
+                <a href="#">Facebook @...</a>
+                <a href="#">Youtube @...</a>
+            </div>
+            <div class="col-lg-12 pt-4">
+                &copy;2020 All rights are reserved
             </div>
         </div>
-
-        <br>
-
-    </div>
+    </footer>
 
     <script src="../res/frameworks/jquery/jquery.js"></script>
     <script>
-        $(".inputMain").focus(function () {
-            $(".jobSearchWrapper").css("transform", "scale(1.1)")
+        $(".mainSearchInput").focus(function () {
+            $(".mainSearchWrapper").css("transform", "scale(1.1)")
         })
-        $(".inputMain").keyup(function () {
-            if ($(".inputMain").val() == "")
-                $(".jobSearchButton").attr("disabled", true)
+        $(".mainSearchInput").keyup(function () {
+            if ($(".mainSearchInput").val() == "")
+                $(".mainSearchButton").attr("disabled", true)
             else
-                $(".jobSearchButton").attr("disabled", false)
+                $(".mainSearchButton").attr("disabled", false)
         })
-        $(".inputMain").focusout(function () {
-            $(".jobSearchWrapper").css("transform", "scale(1)")
+        $(".mainSearchInput").focusout(function () {
+            $(".mainSearchWrapper").css("transform", "scale(1)")
         })
     </script>
 </body>
