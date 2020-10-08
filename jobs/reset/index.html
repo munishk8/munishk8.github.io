@@ -242,10 +242,8 @@
             }
         }
         function sendEmail() {
-            $("#-step1").hide()
-            $("#-step2").show()
-            loading(false)
-            /*$.ajax({
+            loading()
+            $.ajax({
                 type: "POST",
                 url: url + "email/index.php",
                 data: {
@@ -267,7 +265,7 @@
                     showError("Unable to reach the server at the moment please try again later.")
                     loading(false)
                 }
-            })*/
+            })
         }
         function vcValidate(t) {
             if (/[^0-9]/.test(t.val()) || t.val().length != 6) {
