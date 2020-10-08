@@ -1,0 +1,32 @@
+@font-face {
+    font-family: MaterialIcons;
+    font-weight: normal;
+    font-style: normal;
+    src: url(MaterialIcons-Regular.ttf);
+}
+
+@font-face {
+    font-family: MaterialIconsRound;
+    font-weight: normal;
+    font-style: normal;
+    src: url(MaterialIconsRound-Regular.otf);
+}
+
+@font-face {
+    font-family: MaterialIconsOutlined;
+    font-weight: normal;
+    font-style: normal;
+    src: url(MaterialIconsOutlined-Regular.otf);
+}
+
+@font-face {
+    font-family: MaterialIconsTowTone;
+    font-weight: normal;
+    font-style: normal;
+    src: url(MaterialIconsTwoTone-Regular.otf);
+}
+
+i {
+    font-family: MaterialIconsRound;
+    font-style: normal;
+}

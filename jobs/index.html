@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="shortcut icon" href="res/media/JobsIcon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../root/frameworks/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../root/fonts/Quicksand/Quicksand.css">
+    <link rel="stylesheet" href="../root/icons/MaterialIcons/MaterialIcons.css">
+    <title>Jobs</title>
+    <style>
+        * {
+            font-family: Quicksand;
+        }
+
+        button {
+            outline: none;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sec1 {
+            width: 100vw;
+            padding-bottom: 100px;
+            background-image: linear-gradient(57deg, #00c6a7, #1e4d92);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            min-width: 270px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sec1div1 {
+            display: flex;
+            align-items: center;
+            height: 80px;
+            width: 100%;
+        }
+
+        .sec1div1div1 {
+            font-size: 30px;
+            color: #ffffff;
+            padding-left: 10%;
+        }
+
+        .sec1div1div2 {
+            display: flex;
+            padding-right: 5%;
+        }
+
+        .sec1div1div2 a {
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px;
+            transition: .4s;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .sec1div1div2 a:hover {
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        .sec1div2 {
+            margin: 0;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sec1div2div1 {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sec1div2div1 img {
+            width: 100%;
+            padding: 10%;
+        }
+
+        .sec1div2div2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sec1div2div2div1 {
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10%;
+            width: 100%;
+        }
+
+        .sec1div2div2div1div1 {
+            margin-top: 50px;
+            width: 90%;
+            position: relative;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #ffffff;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            display: flex;
+            align-items: center;
+            padding: 25px;
+            transition: .4s;
+        }
+
+        .sec1div2div2div1div1 input {
+            border: none;
+            height: 50px;
+            outline: none;
+            width: calc(100% - 40px);
+        }
+
+        .sec1div2div2div1div1 button {
+            border: none;
+            background-color: #1e4d92;
+            border-radius: 20px;
+            min-width: 40px;
+            height: 40px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: .4s;
+        }
+
+        .sec3 {
+            color: #ffffff;
+            padding: 80px 0;
+            margin: 0;
+            width: 100%;
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);
+            background: rgb(238, 174, 202);
+            background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+        }
+
+        .sec4,
+        .sec6 {
+            padding: 100px 0;
+            width: 100%;
+        }
+
+        .sec4 .row {
+            padding: 0 10%;
+        }
+
+        .sec4 .col-sm-6 {
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sec4 .col-sm-6 img {
+            width: 80px;
+            transition: 0.5s;
+            margin-bottom: 14px;
+        }
+
+        .sec4 .col-sm-6 img:hover {
+            transform: scale(1.3);
+        }
+
+        footer {
+            background-color: #404040;
+            color: #ffffff;
+            margin-top: 10%;
+            padding: 30px 10%;
+        }
+
+        footer>div>div {
+            padding: 20px;
+        }
+
+        footer>div>div>a {
+            margin-left: 16px;
+            color: #dddddd;
+            display: block;
+        }
+
+        footer>div>div>a:hover {
+            color: tomato;
+        }
+
+        .jobCardWrapper>div {
+            margin: 0;
+            padding: 5px;
+        }
+
+        .jobCardWrapper {
+            padding: 0 10%;
+        }
+
+        .jobCard {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .jobCard:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transform: scale(1.0);
+            z-index: 5;
+        }
+
+        .jobCardHeader {
+            display: flex;
+        }
+
+        .jobCardIcon {
+            padding-right: 20px;
+        }
+
+        .jobCardIcon img {
+            width: 70px;
+        }
+
+        .jobCardAction {
+            flex-grow: 1;
+            text-align: right;
+            color: #505050;
+        }
+
+        .jobCardBody {
+            margin-top: 30px;
+        }
+
+        .jobCardBody>div {
+            padding-left: 50px;
+            color: #505050;
+        }
+
+        @media screen and (max-width:650px) {
+            .jobCardWrapper {
+                padding: 10px;
+            }
+
+            .jobCard {
+                padding: 14px;
+            }
+
+            .jobCardIcon {
+                padding-right: 14px;
+            }
+
+            .jobCardIcon img {
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="sec1">
+        <div class="sec1div1">
+            <div class="sec1div1div1">Jobs</div>
+            <div class="flex-grow-1"></div>
+            <div class="sec1div1div2">
+                <a href="signup/">Signup</a>
+                <a href="login/" class="border">Login</a>
+            </div>
+        </div>
+        <div class="row sec1div2">
+            <div class="col-lg-6 sec1div2div1">
+                <img src="res/media/sec1div2div1.png">
+            </div>
+            <div class="col-lg-6 sec1div2div2">
+                <div class="sec1div2div2div1">
+                    <h1>Find a Job</h1>
+                    <p class="text-center">A better career is out there. We'll help you find it.</p>
+                    <div class="sec1div2div2div1div1">
+                        <input type="text" class="" placeholder="Start typing a job...">
+                        <button class="btn" disabled>
+                            <i class="text-light">search</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-4 bg-light">
+        <div class="row m-0 w-100 p-4">
+            <div class="col-sm-4 text-center p-4">
+                <h4 id="-employersCount">
+                    <div class="spinner-border h6 spinner-border-sm text-primary"></div>
+                </h4>
+                <h5>Employers</h5>
+            </div>
+            <div class="col-sm-4 text-center p-4">
+                <h4 id="-candidatesCount">
+                    <div class="spinner-border h6 spinner-border-sm text-primary"></div>
+                </h4>
+                <h5>Candidates</h5>
+            </div>
+            <div class="col-sm-4 text-center p-4">
+                <h4 id="-placementCount">
+                    <div class="spinner-border h6 spinner-border-sm text-primary"></div>
+                </h4>
+                <h5>Placements Done</h5>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec3 row">
+        <div class="col-md-5 d-flex align-items-center justify-content-center rounded-lg">
+            <img src="res/media/sec3div1.png" class="w-100 p-5" style="max-width: 500px;">
+        </div>
+        <div class="col-md-7 p-5">
+            <h4>FIND THE JOB<br>THAT'S RIGHT FOR YOU.</h4>
+            <p>Search all the companies. Get your own personalized Job. The right job is out there.</p>
+            <a class="btn btn-lg btn-primary mt-3" href="#">Search Jobs</a>
+        </div>
+    </section>
+
+    <section class="sec4">
+        <div class="text-center pb-5">
+            <div class="h3">Popular Job Categories</div>
+        </div>
+        <div class="row w-100 m-0">
+            <div class="col-sm-6">
+                <img src="res/media/accounting_icon.png">
+                <h5>Accounting</h5>
+                <p>(<span id="-accountingVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/marketing_icon.png">
+                <h5>Sales & Marketing</h5>
+                <p>(<span id="-salesVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/automobile_icon.png">
+                <h5>Automative Jobs</h5>
+                <p>(<span id="-automativeVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/education_icon.png">
+                <h5>Education Traning</h5>
+                <p>(<span id="-educationVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/healthcare_icon.png">
+                <h5>Health Care</h5>
+                <p>(<span id="-healthcareVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/restaurant_icon.png">
+                <h5>Food Servie</h5>
+                <p>(<span id="-foodVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/telecom_icon.png">
+                <h5>Telecomunication</h5>
+                <p>(<span id="-telecomVacancies">0</span> Vacancies)</p>
+            </div>
+            <div class="col-sm-6">
+                <img src="res/media/construction_icon.png">
+                <h5>Construction</h5>
+                <p>(<span id="-constructionVacancies">0</span> Vacancies)</p>
+            </div>
+        </div>
+        <div class="text-center p-2">
+            <a href="#" class="btn btn-outline-info">Show All Jobs</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="text-center pb-5">
+            <div class="h3">Recent Jobs Listings</div>
+        </div>
+        <div id="-recentJobs" class="row w-100 m-0 jobCardWrapper">
+            <div class="h-100 col-sm-12 text-center">
+                <div class="spinner-border text-primary m-4"></div>
+            </div>
+            <!--
+            <div class="col-lg-6">
+                <div class="jobCard">
+                    <div class="jobCardHeader">
+                        <div class="jobCardIcon">
+                            <img src="res/media/companyIcon.png">
+                        </div>
+                        <div class="jobCardTitle">
+                            <h5>Sample Job of Sample Company</h5>
+                            <div class="badge badge-success">New</div>
+                            <small>Posted<span> 5 day </span>ago</small>
+                        </div>
+                        <div class="jobCardAction">
+                            <i class="h5">launch</i>
+                        </div>
+                    </div>
+                    <div class="jobCardBody">
+                        <div class="row w-100 m-0">
+                            <div class="col-sm-6">
+                                <div><i class="mr-2">account_balance_wallet</i><span>Rs. 20,000 - 25,000</span></div>
+                                <div><i class="mr-2">location_on</i><span>Jalandhar, Punjab</span></div>
+                                <div><i class="mr-2">filter_alt</i><span>Sales & Marketing</span></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div><i class="mr-2">assistant</i><span>Fresher</span></div>
+                                <div><i class="mr-2">pending_actions</i><span>BBA, MBA</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+        <div class="text-center p-2">
+            <a href="#" class="btn btn-outline-secondary">Show All Jobs</a>
+        </div>
+    </section>
+
+    <section class="sec6 sec4">
+        <div class="text-center pb-5">
+            <div class="h3">Top Companies</div>
+        </div>
+        <div class="row w-100 m-0" id="-topCompanies">
+            <div class="h-100 col-sm-12 text-center">
+                <div class="spinner-border text-primary m-4"></div>
+            </div>
+            <!--
+                <div class="col-sm-6">
+                    <img src="res/media/companyIcon.png">
+                    <h5>Fake & Fake Company
+                        <span class="badge badge-success">New</span>
+                    </h5>
+                    <p>(0 Jobs)</p>
+                </div>
+            -->
+        </div>
+        <div class="text-center p-2">
+            <a href="#" class="btn btn-outline-secondary">Show All Companies</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Jobs</h3>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <a href="#">Phone: +91 123123123</a>
+                <a href="#">Email: munish@munish.ml</a>
+                <a href="#">Address: 123 Jalandhar, Punjab, 144001</a>
+            </div>
+            <div class="col-md-4">
+                <h5>Links</h5>
+                <a href="#">Candidate Area</a>
+                <a href="#">Employer Area</a>
+                <a href="#">Site Admin</a>
+            </div>
+            <div class="col-md-4">
+                <h5>Social Links</h5>
+                <a href="#">Instagram @...</a>
+                <a href="#">Facebook @...</a>
+                <a href="#">Youtube @...</a>
+            </div>
+            <div class="col-lg-12 pt-4">
+                &copy;2020 All rights are reserved
+            </div>
+        </div>
+    </footer>
+
+    <div id="a2hs" style="display: none;">
+        <div class="justify-content-center align-items-center w-100 position-fixed"
+            style="height: 100vh;background-color: rgba(0, 0, 0, 0.5); top: 0; left: 0; display: flex;">
+            <div class="bg-light p-3 px-4 rounded-lg border">
+                <h5>Add Jobs to Home screen</h5><br>
+                <button class="btn btn-sm btn-light" onclick="a2hs(); $('#a2hs').fadeOut(200);">Add</button>
+                <button class="btn btn-sm btn-light" onclick="$('#a2hs').fadeOut(200)">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <script src="../root/frameworks/jquery/jquery.js"></script>
+    <script src="../root/frameworks/bootstrap/bootstrap.js"></script>
+
+    <script>
+        var jsw = $(".sec1div2div2div1div1")
+
+        jsw.focusin(function () {
+            jsw.css("transform", "scale(1.05)")
+        })
+        jsw.focusout(function () {
+            jsw.css("transform", "scale(1.0)")
+        })
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            $("#a2hs").fadeIn(200)
+        });
+        function a2hs() {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+                deferredPrompt = null;
+            });
+        }
+    </script>
+</body>
+
+</html>

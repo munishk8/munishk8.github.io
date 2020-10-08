@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="../res/media/JobsIcon.png" type="image/x-icon">
+    <title>Jobs - Create an account</title>
+    <link rel="stylesheet" href="../../root/frameworks/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../../root/fonts/Quicksand/Quicksand.css">
+    <link rel="stylesheet" href="../../root/icons/MaterialIcons/MaterialIcons.css">
+    <style>
+        * {
+            font-family: Quicksand;
+            user-select: none;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modBtnActive {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .modBtnPassive {
+            background-color: #fff;
+            color: #000000;
+        }
+
+        .modBtnActive:hover {
+            color: #ffffff;
+        }
+
+        .modBtnPassive:hover {
+            color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-light d-flex justify-content-center" style="min-height: 100vh;">
+        <div class="my-4" id="-step1" style="width: 300px">
+            <div class="text-center my-2">
+                <img src="../res/media/JobsIcon.png" style="width: 32px;">
+            </div>
+            <div class="text-center mb-5" style="font-size: 20px;">Create an Account</div>
+
+            <form id="mainForm" method="post" class="border rounded-lg p-3"
+                style="background-color: #ffffff; min-width: 280px;">
+                <div class="btn-group btn-group w-100 mb-4 rounded-lg border">
+                    <button type="button" id="modSelect1" onclick="modSelect(1)"
+                        class="btn modBtnActive">Candidate</button>
+                    <button type="button" id="modSelect2" onclick="modSelect(2)"
+                        class="btn modBtnPassive">Employer</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="-name">Full Name</label>
+                    <input type="text" class="form-control" id="-name" name="-name" required>
+                    <div class="invalid-feedback">Please Enter at least 3 character, only alphabet
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="-email">Email address</label>
+                    <input type="email" class="form-control" id="-email" name="-email" required>
+                    <div class="invalid-feedback">Please Enter a valid email</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="-pass">Password</label>
+                    <input type="password" class="form-control" id="-pass" name="-pass" required>
+                    <div class="invalid-feedback">Password should be between 8-15 character<br>Atleast 1 Uppercase
+                        letter
+                        <br>Atleast 1 lowercase letter<br>Atleast 1 special character !@#$%^&*_-</div>
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" id="-tc" class="custom-control-input" required>
+                        <label class="custom-control-label" for="-tc">
+                            I agree to the <a href="#">Privacy Policy</a>
+                        </label>
+                        <div class="invalid-feedback">Please agree to Privacy Policy</div>
+                    </div>
+                </div>
+                <br>
+                <div class="p-3 text-danger small text-center" id="-error" style="display: none"></div>
+                <button class="btn btn-primary btn w-100" id="submitBtn" onclick="verifyEmail(event)">Continue as
+                    Candidate</button>
+            </form>
+
+            <div class="text-center mt-4 rounded-lg">Alreay have an account? <a href="../login/">Sign in</a>
+            </div>
+        </div>
+        <div class="my-4" id="-step2" style="display: none; width: 300px;">
+            <div class="text-center my-4">
+                <img src="../res/media/JobsIcon.png" style="width: 50px;">
+            </div>
+            <div class="text-center my-4" style="font-size: 22px;">Verify your Email</div>
+            <form method="post" class="border rounded-lg p-3" style="background-color: #ffffff; min-width: 280px;">
+                <div class="form-group">
+                    <label for="-vc">Verification code</label>
+                    <input type="number" class="form-control" id="-vc" name="-vc" required>
+                    <div class="invalid-feedback">Please enter a valid code</div>
+                    <small>A verification code has been sent to your email address. Please enter the code provided to
+                        verify its you.</small>
+                </div>
+                <br>
+                <div class="p-3 text-danger small text-center" id="-error2" style="display: none;"></div>
+                <button class="btn btn-primary btn w-100" id="submitBtn2" onclick="verifyCode(event)">Next</button>
+            </form>
+            <div class="text-center my-3"><a href="../signup/">Cancel</a></div>
+        </div>
+        <div class="my-4" id="-step3" style="display: none; background-color: #ffffff;">
+            <div class="text-center my-4">
+                <img src="../res/media/success.gif" style="width: 50%;">
+            </div>
+            <div class="text-center h4 m-2">Success</div>
+            <div class="h5 text-center m-4">Thank you for joining us.</div>
+            <div class="text-center">
+                <a href="../login" class="btn btn-primary btn-sm">Back to login</a>
+            </div>
+        </div>
+    </div>
+    <div id="-loading" style="display: none;">
+        <div class="justify-content-center align-items-center w-100 position-fixed"
+            style="height: 100vh;background-color: rgba(0, 0, 0, 0.2); top: 0; left: 0; display: flex;">
+            <div class="spinner-border text-primary"></div>
+        </div>
+    </div>
+    <script src="../../root/frameworks/jquery/jquery.js"></script>
+    <script src="../../root/frameworks/bootstrap/bootstrap.js"></script>
+    <script>
+        //const url = "http://192.168.43.150/munish.ml/jobs/server/"
+        //const url = "http://localhost/munish.ml/jobs/server/"
+        const url = "https://mkws.ml/jobs/"
+        var vc = $("#-vc")
+        var p = $("#-pass")
+        var n = $("#-name")
+        var e = $("#-email")
+        var t = $("#-tc")
+        var mod = "candidates"
+        var evc = Math.floor((Math.random() * 899999) + 100000)
+        p.keyup(function () { passValidate(p) })
+        e.keyup(function () { emailValidate(e) })
+        n.keyup(function () { nameValidate(n) })
+        function loading(s = true) {
+            if (s) $("#-loading").fadeIn(500)
+            else
+                setTimeout(() => {
+                    $("#-loading").fadeOut(500)
+                }, 500);
+        }
+        function showError(s = "", id = "#-error") {
+            if (s == "") $(id).fadeOut(500)
+            else {
+                $(id).html(s);
+                $(id).fadeIn(500)
+            }
+        }
+        function modSelect(x) {
+            if (x == 1) {
+                $("#modSelect1").removeClass("modBtnPassive")
+                $("#modSelect1").addClass("modBtnActive")
+                $("#modSelect2").removeClass("modBtnActive")
+                $("#modSelect2").addClass("modBtnPassive")
+                $("#submitBtn").html("Continue as Candidate")
+                $("#-loading").show(100)
+                $("#-loading").hide(100)
+                mod = "candidates"
+            } else if (x == 2) {
+                $("#modSelect1").removeClass("modBtnActive")
+                $("#modSelect1").addClass("modBtnPassive")
+                $("#modSelect2").removeClass("modBtnPassive")
+                $("#modSelect2").addClass("modBtnActive")
+                $("#submitBtn").html("Continue as Employer")
+                $("#-loading").show(100)
+                $("#-loading").hide(100)
+                mod = "employers"
+            }
+        }
+        function passValidate(p) {
+            if (p.val().match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*_-]).{8,15}$/)) {
+                p.removeClass('is-invalid')
+                return true
+            } else {
+                p.addClass('is-invalid')
+                return false
+            }
+        }
+        function emailValidate(e) {
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9-]+)*$/.test(e.val())) {
+                e.removeClass('is-invalid')
+                return true
+            } else {
+                e.addClass('is-invalid')
+                return false
+            }
+        }
+        function nameValidate(t) {
+            if (/[^A-Za-z\s]/.test(t.val())) {
+                t.addClass('is-invalid')
+                return false
+            } else {
+                if (t.val().length < 2) {
+                    t.addClass('is-invalid')
+                    return false
+                } else {
+                    t.removeClass('is-invalid')
+                    return true
+                }
+            }
+        }
+        function checkValidate(t) {
+            if (t.prop("checked") == false) {
+                t.addClass('is-invalid')
+                return false
+            } else {
+                t.removeClass('is-invalid')
+                return true
+            }
+        }
+        function verifyEmail(x) {
+            x.preventDefault()
+            if (
+                nameValidate(n) &&
+                emailValidate(e) &&
+                passValidate(p) &&
+                checkValidate(t)
+            ) {
+                loading()
+                showError()
+                $.ajax({
+                    type: "POST",
+                    url: url + "account.php",
+                    data: {
+                        type: "checkAvailability",
+                        mod: mod,
+                        e: e.val()
+                    },
+                    success: function (d) {
+                        if (d == 1) {
+                            sendEmail()
+                        } else if (d == 0) {
+                            showError("This email id is already registered.")
+                            loading(false)
+                        } else {
+                            showError("Uexpected response by server, try again later.")
+                            loading(false)
+                        }
+                    },
+                    error: function () {
+                        showError("Unable to reach the server at the moment please try again later.")
+                        loading(false)
+                    }
+                })
+            }
+        }
+        function sendEmail() {
+            $.ajax({
+                type: "POST",
+                url: url + "email/index.php",
+                data: {
+                    emailTo: e.val(),
+                    emailFrom: "Jobs",
+                    emailSubject: "Jobs - Email Verification",
+                    emailBody: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin: 0; user-select: none;"><div style="box-sizing: border-box; padding: 20px 10%;width: 100%;color: #606060; border-bottom: 1px solid #e0e0e0;position: fixed; top: 0;"><div style="font-size: 32px;">Jobs</div></div><div style="padding: 20px 10%; font-size: 16px; margin-top: 80px;">Dear User,<br><br>Greetings from Jobs! <br>Use the verification code given below to confirm your email address.</div><div style="text-align: center; font-size: 30px;line-height: 70px;">${evc}</div><div style="padding: 20px 10%; font-size: 16px;">Please do not share this with anyone.This is a computer generated email, please do not reply to it here.<br><br>For any queries/clarification, please contact us <a href="mailto:mk6229478@gmail.com" style="color: #007bff; text-decoration: dotted;">mk6229478@gmail.com</a><br>Assuring you of our best service always.<br><br>Regards,<br>Jobs<br></div></body></html>`
+                },
+                success: function (d) {
+                    if (d) {
+                        $("#-step1").hide()
+                        $("#-step2").show()
+                    } else {
+                        showError("Something went please try again later.")
+                    }
+                    loading(false)
+                },
+                error: function () {
+                    showError("Unable to reach the server at the moment please try again later.")
+                    loading(false)
+                }
+            })
+        }
+        function vcValidate(t) {
+            if (/[^0-9]/.test(t.val()) || t.val().length != 6) {
+                t.addClass('is-invalid')
+                return false
+            } else {
+                t.removeClass('is-invalid')
+                return true
+            }
+        }
+        function verifyCode(x) {
+            x.preventDefault()
+            if (vcValidate(vc)) {
+                if (vc.val() == evc) signup()
+                else showError("Incorrect Verification Code. Try again", "#-error2")
+            }
+        }
+        function signup() {
+            loading()
+            $.ajax({
+                type: "POST",
+                url: url + "account.php",
+                data: {
+                    type: "signup",
+                    mod: mod,
+                    e: e.val(),
+                    p: p.val(),
+                    n: n.val()
+                },
+                success: function (d) {
+                    if (d == 1) {
+                        $("#-step2").hide()
+                        $("#-step3").show()
+                    } else if (d == 2)
+                        showError("This email id is already registered.", "#-error2")
+                    else if (d == 0)
+                        showError("Something went wrong. Try Again", "#-error2")
+                    else
+                        showError("Unexpected response by server, try again later.", "#-error2")
+                    loading(false)
+                },
+                error: function () {
+                    showError("Unable to reach the server at the moment please try again later.", "#-error2")
+                    loading(false)
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

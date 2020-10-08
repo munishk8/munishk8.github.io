@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="../res/media/JobsIcon.png" type="image/x-icon">
+    <title>Jobs - Login</title>
+    <link rel="stylesheet" href="../../root/frameworks/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../../root/fonts/Quicksand/Quicksand.css">
+    <link rel="stylesheet" href="../../root/icons/MaterialIcons/MaterialIcons.css">
+    <style>
+        * {
+            font-family: Quicksand;
+            user-select: none;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modBtnActive {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .modBtnPassive {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .modBtnActive:hover {
+            color: #ffffff;
+        }
+
+        .modBtnPassive:hover {
+            color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-light d-flex justify-content-center" style="min-height: 100vh;">
+        <div class="my-4" id="-step1" style="width: 300px">
+            <div class="text-center my-2">
+                <img src="../res/media/JobsIcon.png" style="width: 32px;">
+            </div>
+            <div class="text-center mb-5" style="font-size: 20px;">Login to account</div>
+
+            <form id="mainForm" method="post" class="border rounded-lg p-3"
+                style="background-color: #ffffff; min-width: 280px;">
+                <div class="btn-group btn-group w-100 mb-4 rounded-lg border">
+                    <button type="button" id="modSelect1" onclick="modSelect(1)"
+                        class="btn modBtnActive">Candidate</button>
+                    <button type="button" id="modSelect2" onclick="modSelect(2)"
+                        class="btn modBtnPassive">Employer</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="-email">Email address</label>
+                    <input type="email" class="form-control" id="-email" name="-email" required>
+                    <div class="invalid-feedback">Please Enter a valid email</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="-pass" class="d-flex align-items-center">Password
+                        <div class="flex-grow-1"></div>
+                        <a href="../reset/" class="small">Forgot Password?</a>
+                    </label>
+                    <input type="password" class="form-control" id="-pass" name="-pass" required>
+                    <div class="invalid-feedback">Please enter the password
+                    </div>
+                </div>
+                <br>
+                <div class="p-3 text-danger small text-center" id="-error" style="display: none;"></div>
+                <button class="btn btn btn-primary w-100" id="submitBtn" onclick="login(event)">
+                    Login
+                </button>
+            </form>
+
+            <div class="text-center  mt-4 rounded-lg">Don't have an account? <a href="../signup/">Create
+                    here</a></div>
+        </div>
+        <div class="my-4" id="-step2" style="display: none; width: 300px">
+            <div class="text-center my-4">
+                <img src="../res/media/JobsIcon.png" style="width: 50px;">
+            </div>
+            <div class="text-center my-4" style="font-size: 22px;">You are already logged in</div>
+            <div class="text-center my-3"><a href="../dashboard/" class="btn btn-primary">Visit Dashboard</a> <button
+                    class="btn btn-danger" onclick="logout()">Logout</button></div>
+        </div>
+    </div>
+    <div id="-loading" style="display: none;">
+        <div class="justify-content-center align-items-center w-100 position-fixed"
+            style="height: 100vh;background-color: rgba(0, 0, 0, 0.2); top: 0; left: 0; display: flex;">
+            <div class="spinner-border text-success"></div>
+        </div>
+    </div>
+    <script src="../../root/frameworks/jquery/jquery.js"></script>
+    <script src="../../root/frameworks/bootstrap/bootstrap.js"></script>
+    <script>
+        //const url = "http://192.168.43.150/munish.ml/jobs/server/"
+        //const url = "http://localhost/munish.ml/jobs/server/"
+        const url = "https://mkws.ml/jobs/"
+        var mod = "candidates"
+        let p = $("#-pass")
+        let e = $("#-email")
+        p.keyup(function () { passValidate(p) })
+        e.keyup(function () { emailValidate(e) })
+        if (localStorage.getItem("loggedStatus") != null && localStorage.getItem("loggedStatus") == "true") {
+            $("#-step1").hide()
+            $("#-step2").show()
+        }
+        function logout() {
+            localStorage.clear()
+            window.location.reload()
+        }
+        function loading(s = true) {
+            if (s) $("#-loading").fadeIn(500)
+            else
+                setTimeout(() => {
+                    $("#-loading").fadeOut(500)
+                }, 500);
+        }
+        function showError(s = "", id = "#-error") {
+            if (s == "") $(id).fadeOut(500)
+            else {
+                $(id).html(s);
+                $(id).fadeIn(500)
+            }
+        }
+        function modSelect(x) {
+            if (x == 1) {
+                $("#modSelect1").removeClass("modBtnPassive")
+                $("#modSelect1").addClass("modBtnActive")
+                $("#modSelect2").removeClass("modBtnActive")
+                $("#modSelect2").addClass("modBtnPassive")
+                $("#-loading").show(100)
+                $("#-loading").hide(100)
+                mod = "candidates"
+            } else if (x == 2) {
+                $("#modSelect1").removeClass("modBtnActive")
+                $("#modSelect1").addClass("modBtnPassive")
+                $("#modSelect2").removeClass("modBtnPassive")
+                $("#modSelect2").addClass("modBtnActive")
+                $("#-loading").show(100)
+                $("#-loading").hide(100)
+                mod = "employers"
+            }
+        }
+        function passValidate(p) {
+            p.val(p.val().replace(/[|;"<>()+,]/g, ""))
+            if (p.val() != "") {
+                p.removeClass('is-invalid')
+                return true
+            } else {
+                p.addClass('is-invalid')
+                return false
+            }
+        }
+        function emailValidate(e) {
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9-]+)*$/.test(e.val())) {
+                e.removeClass('is-invalid')
+                return true
+            } else {
+                e.addClass('is-invalid')
+                return false
+            }
+        }
+        function login(x) {
+            x.preventDefault()
+            showError()
+            if (emailValidate(e) && passValidate(p)) {
+                loading()
+                $.ajax({
+                    type: "POST",
+                    url: url + "account.php",
+                    data: {
+                        type: "login",
+                        mod: mod,
+                        e: e.val(),
+                        p: p.val()
+                    },
+                    success: function (d) {
+                        if (d == 2)
+                            showError("No account exists with this email")
+                        else if (d == 3)
+                            showError("The password is incorrect")
+                        else if (d == 4)
+                            showError("This account has been suspended.<br>Contact administration")
+                        else {
+                            localStorage.clear()
+                            localStorage.setItem("udata", d);
+                            localStorage.setItem("loggedStatus", true);
+                            localStorage.setItem("loggedType", mod);
+                            window.location.href = "../dashboard"
+                        }
+                        loading(false)
+                    },
+                    error: function () {
+                        showError("Unable to reach the server at<br>the moment please try again later.")
+                        loading(false)
+                    }
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>
