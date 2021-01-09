@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/bootstrap.min.css">
+    <link rel="stylesheet" href="res/icons/MaterialIcons/MaterialIcons.css">
+    <title>Munish's - BCA</title>
+    <style>
+        .container{
+            padding: 50px 20px;
+        }
+        .links a{
+            display: block;
+            padding: 4px;
+            text-decoration: dotted;
+        }
+        .links a:hover{
+            background-color: #e0e0e0;
+            color: #505050;
+        }
+        .menu a{
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            padding-left: 30px;
+            text-decoration: none;
+            color: #404040;
+        }
+        .menu a:hover{
+            background-color: #e0e0e0;
+            color: #505050;
+        }
+        .menu a i{
+            padding: 2px 10px;
+            padding-right: 20px;
+        }
+        .header{
+            padding: 0 5vw;
+            display: flex;
+            background-color: #ffffff;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+        }
+        .menu{
+            height: 100vh;
+            width: 250px;
+            background-color: #ffffff;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: -300px;
+            transition: 300ms;
+        }
+        .menu-open{
+            left: 0;
+        }
+        .footer{
+            background-color: #404040;
+            color: #f0f0f0;
+            width: 100%;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <i onclick="menuToggle()">menu</i>
+        <div class="d-flex justify-content-center flex-grow-1">
+            <img src="res/media/m_icon.jpg" style="width: 46px;" alt="">
+        </div>
+    </div>
+    <div class="menu" id="menu">
+        <a href="javascript:menuToggle()"><i>close</i></a>
+        <a href="index.html">Syllabus</a>
+        <a href="index.html">Question Papers</a>
+        <a href="python.html">Python Programs</a>
+        <hr>
+        <a href="share.html">Share your content</a>
+        <hr>
+        <a href="contact.html">Contact Us</a>
+        <a href="contact.html">Report an issue</a>
+    </div>
+    
+    <div class="container">
+        <h4>Ways to reach me</h4>
+        <div class="ml-4 links">
+            <br><br>
+            <h6>Write an Email</h6>
+            <a href="mailto:web.munish.ml@gmail.com">web.munish.ml@gmail.com</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h4>Have a suggestion?</h4>
+        <div class="ml-4 links">
+            <br><br>
+            <h6>I'd love to here any suggestion from you</h6>
+            <a href="mailto:web.munish.ml@gmail.com">web.munish.ml@gmail.com</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h4>Found any issue! Report here</h4>
+        <div class="ml-4 links">
+            <br><br>
+            <h6>Please report any issue if you found.</h6>
+            <a href="mailto:web.munish.ml@gmail.com">web.munish.ml@gmail.com</a>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="footer">
+        <p><a href="index.html" style="color:#a0a0a0;">Home Page</a></p>
+        <br>
+        <small>Rights Are Reserved &nbsp;|&nbsp; by Munish</small>
+    </div>
+    <script src="res/js/jquery-3.5.1.min.js"></script>
+    <script src="res/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function menuToggle(){
+            $("#menu").toggleClass("menu-open")
+        }
+    </script>
+</body>
+</html>
