@@ -46,6 +46,9 @@
             align-items: center;
             width: 100%;
             height: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
         }
         .menu{
@@ -67,6 +70,18 @@
             width: 100%;
             padding: 10px;
         }
+        .MenuOverlay{
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            visibility: hidden;
+        }
+        .MenuOverlayEnabled{
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
@@ -76,8 +91,9 @@
             <img src="res/media/m_icon.jpg" style="width: 46px;" alt="">
         </div>
     </div>
-    <div class="menu" id="menu">
-        <a href="javascript:menuToggle()"><i>close</i></a>
+    <div id="MenuOverlay" class="MenuOverlay" onclick="menuToggle()"></div>
+    <div class="menu" id="menu" onclick="menuToggle()">
+        <a><i>close</i></a>
         <a href="index.html#syllabus">Syllabus</a>
         <a href="index.html#paper">Question Papers</a>
         <a href="index.html#python">Python Programs</a>
@@ -86,6 +102,14 @@
         <hr>
         <a href="contact.html">Contact Us</a>
         <a href="contact.html">Report an issue</a>
+    </div>
+    <div class="m-5"></div>
+    <div class="container">
+        <h4><span class="mr-3 badge badge-primary">Tutorial</span></h4>
+        <h4>Learn how to scan your Notes and create PDF</h4>
+        <div class="ml-4 links">
+            <a href="../tutorials/how-to-scan-notes.html">How to scan Notes and create a PDF<span class="ml-3 badge badge-danger">New</span></a>
+        </div>
     </div>
     <div class="container">
         <h4>Datesheet</h4>
@@ -175,7 +199,7 @@
         <div class="container">
             <h4>Want to collaborate</h4>
             <a href="share.html" style="color:#a0a0a0;">Share your content</a><br>
-            <a href="share.html" style="color:#a0a0a0;">Contact Us</a>
+            <a href="contact.html" style="color:#a0a0a0;">Contact Us</a>
             <br><br>
             <h4>Munish's</h4>
             <small>munish.ml</small>
@@ -188,6 +212,7 @@
     <script>
         function menuToggle(){
             $("#menu").toggleClass("menu-open")
+            $("#MenuOverlay").toggleClass("MenuOverlayEnabled")
         }
     </script>
 </body>

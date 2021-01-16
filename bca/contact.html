@@ -43,6 +43,9 @@
             width: 100%;
             height: 60px;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
         }
         .menu{
             height: 100vh;
@@ -63,6 +66,18 @@
             width: 100%;
             padding: 10px;
         }
+        .MenuOverlay{
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            visibility: hidden;
+        }
+        .MenuOverlayEnabled{
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
@@ -72,11 +87,13 @@
             <img src="res/media/m_icon.jpg" style="width: 46px;" alt="">
         </div>
     </div>
-    <div class="menu" id="menu">
-        <a href="javascript:menuToggle()"><i>close</i></a>
+    <div id="MenuOverlay" class="MenuOverlay" onclick="menuToggle()"></div> 
+    <div class="menu" id="menu" onclick="menuToggle()">
+        <a><i>close</i></a>
         <a href="index.html">Home Page</a>
     </div>  
     
+    <div class="m-5"></div>
     <div class="container">
         <h4>Ways to reach me</h4>
         <div class="ml-4 links">
@@ -117,6 +134,7 @@
     <script>
         function menuToggle(){
             $("#menu").toggleClass("menu-open")
+            $("#MenuOverlay").toggleClass("MenuOverlayEnabled")
         }
     </script>
 </body>
