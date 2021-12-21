@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Test Website</title>
+
+    <link href="res/css/45bc3daa3a2d.css" type="text/css" crossorigin="anonymous" rel="stylesheet">
+    <link rel="stylesheet" href="res/css/962fa2d72954_v0.1.css" type="text/css" crossorigin="anonymous">
+    <link rel="stylesheet" href="res/css/ea59a99ea85f.css" type="text/css" crossorigin="anonymous">
+
+    <!--script src="../.res/frameworks/jquery/jquery.js"></script-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script>
+        if (window.location.hash === "#active")
+            $("#root").load("res/raw/index_v0.1")
+        else
+            $('#root').html("<h2>Test Website</h2>")
+    </script>
+
+</body>
+
+</html>
