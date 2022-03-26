@@ -2,7 +2,7 @@
 // const server_url = "http://192.168.43.1:8080/xchat/server/";
 // const server_url = "https://munish.rf.gd/xchat/";
 // const server_url = "https://192.168.43.20/final_xchat/server/";
-const server_url = "https://munish11.000webhostapp.com/xchat/server/";
+const server_url = "http://munish11.000webhostapp.com/xchat/server/";
 const profile_picture_url = "res/media/profilePicture.png";
 
 var initial_view = "get_started";

@@ -8,10 +8,10 @@
             "sizes": "192x192"
         }
     ],
-    "start_url": "https://munish.ml/xchat/",
+    "start_url": "/",
     "background_color": "#FFFFFF",
     "display": "standalone",
-    "scope": "https://munish.ml/xchat/",
+    "scope": "/",
     "theme_color": "#DC3545",
     "description": "XCHAT"
 }
