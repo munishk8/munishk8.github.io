@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>XCHAT</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#DC3545">
+    <link rel="shortcut icon" href="./res/media/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="./res/css/bootstrap/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="./res/fonts/Poppins/index.css"> -->
+    <!-- <link rel="stylesheet" href="./res/fonts/Nunito/index.css"> -->
+    <!-- <link rel="stylesheet" href="./res/icons/MaterialIcons/index.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    
+    <!-- <script src="./res/js/jquery/jquery.min.js"></script> -->
+    <!-- <script src="./res/js/bootstrap/bootstrap.bundle.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="res/css/fonts.css?_=dkw3kjlwef">
+    <link rel="stylesheet" href="res/css/animations.css?_=dkw3kjlwef">
+    <link rel="stylesheet" href="res/css/index.css?_=dkw3kjlwef">
+    <link rel="stylesheet" href="res/css/message-ui.css?_=dkw3kjlwef">
+
+    <script src="res/js/view.js?_=dkw3kjlwef"></script>
+    <script src="res/js/auth.js?_=dkw3kjlwef"></script>
+    <script src="res/js/user.js?_=dkw3kjlwef"></script>
+    <script src="res/js/index.js?_=dkw3kjlwef"></script>
+
+</head>
+
+<body>
+    <div id="preloader" class="d-flex position-absolute top-0 bottom-0 start-0 end-0 justify-content-center align-items-center bg-light" style="z-index: 999;">
+        <div class="spinner-border text-secondary"></div>
+    </div>
+    <script>
+        $(window).on("load", function () {
+            $("#preloader").addClass("fade-out");
+            setTimeout(() => {
+                $("#preloader").remove();
+            }, 200);
+        });
+    </script>
+    <!-- <script>
+        
+        const no_cache = "?version=" + (Math.floor(Math.random() * 1000000) + 111111);
+        function get_stylesheet(url) {
+            let e = document.createElement("link");
+            e.rel = "stylesheet";
+            e.href = url + no_cache;
+            document.head.appendChild(e);
+        }
+        function get_script(url) {
+            let e = document.createElement('script');
+            e.type = 'text/javascript';
+            e.src = url + no_cache;
+            document.body.appendChild(e);
+        }
+        get_script("./res/js/view.js");
+        get_stylesheet("./res/css/index.css");
+        get_stylesheet("./res/css/animations.css");
+        get_stylesheet("./res/css/fonts.css");
+        get_stylesheet("./res/css/temp.css");
+        get_script("./res/js/auth.js");
+        get_script("./res/js/user.js");
+        get_script("./res/js/index.js");
+    </script> -->
+    <div class="view" id="loading">
+        <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+            <div class="spinner-border text-secondary border-4 p-3"></div>
+        </div>
+    </div>
+    <div class="view" id="error">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="window.location.reload();">refresh</div>
+        </div>
+        <div class="flex-grow-1 d-flex flex-column p-5">
+            <div>
+                <div class="fw-600 fs-16 mb-4">Something went wrong.</div>
+                <div>Unable to reach the server. Please try again later.</div>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="get_started">
+        <div class="flex-grow-1 p-5 d-flex flex-column justify-content-center">
+            <div class="text-danger nunito fw-900 fs-16 mb-3">XCHAT</div>
+            <div class="h2 mb-4 text-dark">Get Started</div>
+            <div class="fs-11 text-muted">
+                By clicking next you agree to our <a onclick="view('terms_of_service');" class="text-muted">Terms of Service</a> and <a class="text-muted" onclick="view('privacy_policy');">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="d-flex px-5 pb-5 justify-content-end">
+            <div class="material-icons d-flex rounded-circle text-light bg-danger justify-content-center align-items-center shadow-sm border grow-animation" style="width: 60px; height: 60px;" onclick="view('signin')">
+                arrow_forward_ios
+            </div>
+        </div>
+    </div>
+    <div class="view" id="privacy_policy">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="mx-4 fw-600 fs-18 text-dark">Privacy Policy</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 p-5">
+            <div class="fw-600 fs-24 text-dark mb-4">Privacy Notice</div>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias maxime nam dolorum obcaecati pariatur, expedita sequi consectetur iure porro, incidunt quasi assumenda alias tempore minima rerum laborum, ullam veritatis mollitia!</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum dolores tempora, quos modi commodi tenetur ratione, voluptatum odit non rem necessitatibus saepe quasi vel, consectetur quisquam animi neque repellendus omnis.</p>
+        </div>
+    </div>
+    <div class="view" id="terms_of_service">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="mx-4 fw-600 fs-18 text-dark">Terms of Service</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 p-5">
+            <div class="fw-600 fs-24 text-dark mb-4">Terms of Service</div>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias maxime nam dolorum obcaecati pariatur, expedita sequi consectetur iure porro, incidunt quasi assumenda alias tempore minima rerum laborum, ullam veritatis mollitia!</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum dolores tempora, quos modi commodi tenetur ratione, voluptatum odit non rem necessitatibus saepe quasi vel, consectetur quisquam animi neque repellendus omnis.</p>
+        </div>
+    </div>
+    <div class="view" id="signup_1">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+        </div>
+        <div class="flex-grow-1 d-flex flex-column align-items-center p-5">
+            <form method="post" class="flex-grow-1 d-flex flex-column w-100" style="max-width: 300px;" onsubmit="signup_send_verification_code(event)">
+                <div class="fw-600 fs-26 mb-5">
+                    Create Your New<br> Account
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-600" for="signup_email_address">Email address</label>
+                    <input id="signup_email_address_input" type="text" class="form-control m-input" name="email_address" onkeyup="signup_is_email_address_available()">
+                    <small id="signup_email_address_invalid_feedback" class="invalid-feedback"></small>
+                </div>
+                <div class="form-group mt-3 d-flex justify-content-end">
+                    <input type="submit" class="btn btn-danger shadow-sm px-5 w-100" id="signup_1_submit_button" value="Next">
+                </div>
+                <div class="mt-5">
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <div class="mb-3 fs-12">
+                            Have an account?
+                        </div>
+                        <div class="btn btn-outline-secondary shadow-sm w-100 px-5" onclick="view('signin')">Sign In</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="view" id="signup_2">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+        </div>
+        <div class="d-flex flex-grow-1 flex-column align-items-center p-5">
+            <div class="w-100" style="max-width: 300px;">
+                <div class="fw-600 fs-26 mb-5">
+                    Verify Your Email Address
+                </div>
+                <form method="post" class="w-100" onsubmit="signup_verify_verification_code(event);">
+                    <div class="mb-3">An OTP has been sent to your email address.</div>
+                    <label for="signup_verification_code_input" class="fw-600 ">Enter OTP</label>
+                    <input id="signup_verification_code_input" class="form-control m-input" type="number" onkeyup="signup_2_clear_error();">
+                    <small id="signup_verification_code_invalid_feedback" class="invalid-feedback"></small>
+                    <input id="signup_2_submit_button" type="submit" value="Verify" class="btn btn-danger mt-5 w-100">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="signup_3">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="view('signin')">close</div>
+        </div>
+        <div class="p-5 d-flex flex-grow-1 flex-column align-items-center">
+            <div class="w-100" style="max-width: 300px;">
+                <div class="fw-600 fs-26 mb-5">Setup Your New Account</div>
+                <form method="post" onsubmit="signup_3(event)">
+                    <div class="form-group mb-4">
+                        <label for="signup_username_input" class="form-label fw-600">Create Username</label>
+                        <input type="text" name="username" id="signup_username_input" class="form-control m-input" onkeyup="signup_check_username();">
+                        <small id="signup_username_invalid_feedback" class="invalid-feedback"></small>
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="signup_password_input" class="form-label fw-600">New Password</label>
+                        <input type="password" name="password" id="signup_password_input" class="form-control m-input" onkeyup="signup_check_password();">
+                        <small id="signup_password_invalid_feedback" class="invalid-feedback"></small>
+                    </div>
+                    <div class="form-group">
+                        <input id="signup_3_submit_button" type="submit" value="Next" class="btn btn-danger shadow-sm w-100">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="signup_4">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 align-items-center p-5">
+            <div class="w-100" style="max-width: 300px;">
+                <div class="fs-24 fw-600 mb-5">Setup Your Profile</div>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                        <label for="signup_profile_picture" class="form-label profile-picture-label">
+                            <div class="profile-picture-placeholder shadow-sm border"></div>
+                            <div class="material-icons profile-picture-select-icon shadow-sm bg-light border text-secondary d-flex grow-animation">photo_camera</div>
+                        </label>
+                        <input type="file" id="signup_profile_picture" name="profile_picture" class="form-control" hidden accept="image/*" onchange="signup_profile_picture_change(event);">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="signup_name_input" class="form-label fw-600">Your Name</label>
+                        <input type="text" id="signup_name_input" name="profile_name" class="form-control m-input" onfocus="$(this).removeClass('is-invalid');$('#signup_4_submit_button').removeClass('disabled')">
+                        <small class="invalid-feedback">
+                            Please enter your name.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger shadow-sm w-100" id="signup_4_submit_button" type="submit" onclick="signup(event);">Finish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="signin">
+        <div class="d-flex p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 align-items-center p-5">
+            <div class="w-100" style="max-width: 300px;">
+                <form method="post" onsubmit="signin(event);">
+                    <div class="fw-600 fs-32 mb-4">Sign In</div>
+                    <div class="form-group">
+                        <input type="hidden" id="signin_incorrect">
+                        <small class="invalid-feedback mb-3">Either username or password is Incorrect.</small>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-600" for="signin_username_input">Username</label>
+                        <input type="text" class="form-control m-input" name="username" id="signin_username_input" onfocus="$(this).removeClass('is-invalid'); $('#signin_submit_button').removeClass('disabled');">
+                        <small class="invalid-feedback">Please enter username.</small>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-600" for="signin_password_input">Password</label>
+                        <input type="password" class="form-control m-input" name="password" id="signin_password_input" onfocus="$(this).removeClass('is-invalid'); $('#signin_submit_button').removeClass('disabled');">
+                        <small class="invalid-feedback">Please enter password.</small>
+                    </div>
+                    <div class="form-group mb-4">
+                        <button type="submit" id="signin_submit_button" class="btn btn-danger w-100 shadow-sm">Sign In</button>
+                    </div>
+                </form>
+                <div class="mt-5">
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <div class="mb-3 fs-12">Don't have an account?</div>
+                        <div class="btn btn-outline-secondary shadow-sm w-100 px-5" onclick="view('signup_1');">Create Account</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .user-card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-card-new-messages {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #DC3545;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        .user-card-new-messages>div {
+            margin-bottom: -2px;
+        }
+    </style>
+    <div class="view" id="user_home">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons"></div>
+            <div class="mx-3 flex-grow-1 fw-600 fs-24">Messages</div>
+            <div class="material-icons p-2 hoverable-icon" onclick="overlay('menu_user_home')">more_vert</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1" id="conversations_window">
+            <div class='d-flex flex-grow-1 justify-content-center align-items-center'>
+                <div class='fade-pop fw-600'>No Messages</div>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="splash">
+        <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+            <div class="nunito fw-900 text-danger fs-16 mb-4">XCHAT</div>
+            <div class="spinner-border text-secondary"></div>
+        </div>
+    </div>
+    <div class="view" id="user_settings">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 mx-4 flex-grow-1 fs-20">Settings</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="list-item-wrapper" onclick="localStorage.clear(); window.location.reload();">
+                <div class="list-item-icon material-icons">logout</div>
+                <div class="list-item-content">Logout</div>
+            </div>
+            <!-- <div class="list-item-wrapper" onclick="view('get_started');">
+                <div class="list-item-icon material-icons">circle</div>
+                <div class="list-item-content">Getting Started</div>
+            </div> -->
+            <div class="list-item-wrapper">
+                <div class="list-item-icon material-icons">support</div>
+                <div class="list-item-content">Help & Support</div>
+            </div>
+            <div class="list-item-wrapper" onclick="view('user_settings_about')">
+                <div class="list-item-icon material-icons">info</div>
+                <div class="list-item-content">About</div>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="user_search">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 flex-grow-1 fs-20 mx-4">Search</div>
+        </div>
+        <div class="flex-grow-1 d-flex flex-column">
+            <div class="p-3`">
+                <div class="border flex-grow-1 mx-3 d-flex" style="border-radius: 25px;">
+                    <input type="text" placeholder="Search" class="border-0 w-100 flex-grow-1 mx-3" style="outline: none; background-color: transparent;" onkeyup="search_user(this.value);">
+                    <div class="material-icons text-secondary p-2 d-flex align-items-center justify-content-center" style="border-radius: 25px;">search</div>
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 py-3" id="user_search_result">
+                <!-- <div class="user-card-wrapper">
+                    <div class="user-card-image"></div>
+                    <div class="user-card-data">
+                        <div class="user-card-profile-name">Profile Name</div>
+                        <div class="user-card-username">username</div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="view" id="profile_page">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 mx-4 flex-grow-1 fs-18">User Profile</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex align-items-center p-5 py-4">
+                <div class="border other-user-profile-picture profile-picture"></div>
+                <div class="mx-3"></div>
+                <div>
+                    <div class="fw-600 fs-20 other-user-profile-name">Profile Name</div>
+                    <div class="other-user-username">username</div>
+                </div>
+            </div>
+            <div class="px-5 py-3">
+                <div class="fw-600 fs-16 mb-2">About</div>
+                <p class="other-user-profile-about"></p>
+            </div>
+            <div class="px-5 py-3 d-flex" id="profile_page_controls">
+                <!-- <button class="btn w-100 btn-danger shadow-sm" id="profile_page_request_button">Request</button> -->
+            </div>
+        </div>
+    </div>
+    <div class="view" id="user_friends">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 mx-4 flex-grow-1 fs-20">Friends</div>
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="user_friends_view();">refresh</div>
+        </div>
+        <div class="flex-grow-1 d-flex flex-column overflow-auto">
+            <div class="fw-600 fs-20 px-5 py-3">Requests</div>
+            <div class="d-flex flex-column py-3" id="user_friend_request_list">
+                <!-- <div class="user-card-wrapper">
+                    <div class="user-card-image"></div>
+                    <div class="user-card-data">
+                        <div class="user-card-profile-name">Profile Name</div>
+                        <div class="user-card-username">username</div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button class="btn fs-12 btn-outline-secondary" onclick="AcceptFriendRequest();">Accept</button>
+                    </div>
+                </div> -->
+            </div>
+            <div class="fw-600 fs-20 px-5 py-3">Friends</div>
+            <div class="d-flex flex-column flex-grow-1 py-3" id="user_friend_list">
+                <!-- <div class="user-card-wrapper">
+                    <div class="user-card-image"></div>
+                    <div class="user-card-data">
+                        <div class="user-card-profile-name">Profile Name</div>
+                        <div class="user-card-username">username</div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="view" id="user_settings_about">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 mx-4 flex-grow-1 fs-20">About</div>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 px-5 overflow-auto">
+            <!-- <div class="fw-600 fs-24">About Us</div> -->
+            <div class="mt-4">
+                <div class="fw-900 nunito text-danger fs-16">XCHAT</div>
+                <div class="fs-11 text-secondary">&copy; All rights are reserved.</div>
+                <div class="text-secondary fs-11">Version: 1.0.0</div>
+            </div>
+            <div class="mt-5">
+                <div class="fw-600 fs-14 mb-1">Developed by</div>
+                <div class="fs-18 text-secondary">Munish Kumar</div>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="user_chat">
+        <div class="d-flex align-items-center px-3 py-2">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="user-card-image other-user-profile-picture mx-1" style="background-image: url(res/media/profilePicture.png); width: 50px; height: 50px;"></div>
+            <div class="user-card-data px-2 flex-grow-1">
+                <div class="user-card-profile-name other-user-profile-name">Profile Name</div>
+                <div class="user-card-username other-user-username">username</div>
+            </div>
+            <!-- <div class="material-icons p-2">more_vert</div> -->
+        </div>
+        <div class="flex-grow-1 chat-window-wrapper" id="chat_window"></div>
+        <form class="d-flex p-2" onsubmit="send_message(event);">
+            <!-- <input type="text" placeholder="Type your message..." class="w-100 form-control" style="border-radius: 25px; padding: 10px 20px;" id="message_input"> -->
+            <!-- <div class="mx-1"></div> -->
+            <div class="border w-100 p-1 d-flex" style="border-radius: 25px;">
+                <input class="border-0 flex-grow-1 p-2 w-100 mx-2" id="message_input" placeholder="Type message..." style="outline: none;" type="text" name="" id="">
+                <button class="btn btn-secondary shadow-sm mx-1 material-icons disabled" style="border-radius: 25px; font-size: 20px;">photo_camera</button>
+                <button class="btn btn-secondary shadow-sm material-icons" type="submit" style="border-radius: 25px; font-size: 20px;">arrow_forward</button>
+            </div>
+            <!-- <button type="submit" class="btn btn-danger" id="message_send_button" style="border-radius: 25px; padding: 0 20px;">Send</button> -->
+        </form>
+    </div>
+    <div class="view" id="user_profile">
+        <div class="d-flex align-items-center p-3">
+            <div class="material-icons fw-600 text-danger p-2 hoverable-icon" onclick="last_view();">arrow_back</div>
+            <div class="fw-600 mx-4 flex-grow-1 fs-18">Profile Setup</div>
+            <!-- <div class="material-icons text-secondary p-2 hoverable-icon" onclick="last_view();">edit</div> -->
+        </div>
+        <!-- <div class="d-flex flex-column flex-grow-1 align-items-center p-5">
+            <div class="w-100" style="max-width: 300px;">
+                <div class="fs-24 fw-600 mb-5">Setup Your Profile</div>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group mb-4 d-flex flex-column align-items-center justify-content-center">
+                        <label for="signup_profile_picture" class="form-label profile-picture-label">
+                            <div class="profile-picture-placeholder shadow-sm border"></div>
+                            <div class="material-icons profile-picture-select-icon shadow-sm bg-light border text-secondary d-flex grow-animation">image</div>
+                        </label>
+                        <input type="file" id="signup_profile_picture" name="profile_picture" class="form-control" hidden accept="image/*" onchange="signup_profile_picture_change(event);">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="signup_name_input" class="form-label fw-600">Your Name</label>
+                        <input type="text" id="signup_name_input" name="profile_name" class="form-control m-input" onfocus="$(this).removeClass('is-invalid');$('#signup_4_submit_button').removeClass('disabled')">
+                        <small class="invalid-feedback">
+                            Please enter your name.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger shadow-sm w-100" id="signup_4_submit_button" type="submit" onclick="signup(event);">Finish</button>
+                    </div>
+                </form>
+            </div>
+        </div> -->
+        <style>
+            .user-profile-picture {
+                width: 120px;
+                height: 120px;
+                background-position: center;
+                background-size: cover;
+                border-radius: 50%;
+            }
+        </style>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="form-group mt-4 d-flex flex-column align-items-center justify-content-center">
+                <label for="user_profile_picture_edit_input" class="form-label profile-picture-label">
+                    <div class="profile-picture-placeholder border active-user-profile-picture"></div>
+                    <!-- <div class="material-icons profile-picture-select-icon shadow-sm bg-light border text-danger d-flex grow-animation">photo_camera</div> -->
+                </label>
+                <input type="file" id="user_profile_picture_edit_input" name="profile_picture" class="form-control" hidden accept="image/*" onchange="profile_picture_update(event);">
+            </div>
+            <!-- <div class="d-flex align-items-center px-5 p-4">
+                <div class="d-flex justify-content-center align-items-center w-100">
+                    <div class="border active-user-profile-picture user-profile-picture" id=""></div>
+                </div>
+                <div class="mx-3"></div>
+                <div>
+                    <div class="fw-600 fs-20 active-user-profile-name">Profile Name</div>
+                    <div class="active-user-username">username</div>
+                </div>
+            </div> -->
+            <div class="pt-4">
+                <div class="d-flex align-items-center p-3 px-5 hover-dark">
+                    <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
+                        <div class="fs-12 fw-600">Name</div>
+                        <div class="fs-16 text-muted active-user-profile-name"></div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="material-icons text-danger hoverable-icon p-2" style="font-size: 20px;" onclick="update_profile_name()">edit</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center p-3 px-5 hover-dark">
+                    <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
+                        <div class="fs-12 fw-600">About</div>
+                        <div class="fs-16 text-muted active-user-profile-about">Single isn't a status its a word describing a person strong enough</div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="material-icons text-danger hoverable-icon p-2" style="font-size: 20px;" onclick="update_profile_about()">edit</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center p-3 px-5 hover-dark">
+                    <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
+                        <div class="fs-12 fw-600">Username</div>
+                        <div class="fs-16 text-muted active-user-username"></div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="material-icons text-muted hoverable-icon p-2" style="font-size: 20px;">edit</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center p-3 px-5 hover-dark">
+                    <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
+                        <div class="fs-12 fw-600">Email Address</div>
+                        <div class="fs-16 text-muted active-user-email-address"></div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="material-icons text-muted hoverable-icon p-2" style="font-size: 20px;">edit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="popup">
+        <div class="popup-overlay" onclick="overlay();"></div>
+        <div class="popup-window shadow-lg border-top">
+            <div class="px-5 flex-grow-1 overflow-auto">
+                <div id="popup_title" class="fw-600 fs-24 mb-4"></div>
+                <div id="popup_text"></div>
+            </div>
+            <div class="p-5 d-flex flex-column align-items-end" id="popup_control"></div>
+        </div>
+    </div>
+    <div class="overlay" id="loading_overlay">
+        <div class="popup-overlay"></div>
+        <div class="flex-grow-1 d-flex justify-content-center align-items-center" style="z-index: 8;">
+            <div class="spinner-border text-light border-4 p-3"></div>
+        </div>
+    </div>
+    <div class="overlay" id="menu_user_home">
+        <div class="popup-overlay" onclick="overlay();"></div>
+        <div class="popup-window shadow-lg border-top">
+            <div class="mb-4 fw-600">
+                <div class="list-item-wrapper" onclick="view('user_profile'); user_profile_view();">
+                    <div class="list-item-icon material-icons">account_circle</div>
+                    <div class="list-item-content">Profile</div>
+                </div>
+                <div class="list-item-wrapper" onclick="view('user_friends'); user_friends_view();">
+                    <div class="list-item-icon material-icons">circle</div>
+                    <div class="list-item-content">Friends</div>
+                </div>
+                <div class="list-item-wrapper" onclick="view('user_search');">
+                    <div class="list-item-icon material-icons">search</div>
+                    <div class="list-item-content">Search</div>
+                </div>
+                <div class="list-item-wrapper" onclick="view('user_settings');">
+                    <div class="list-item-icon material-icons">settings</div>
+                    <div class="list-item-content">Settings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="menu_chat_view">
+        <div class="popup-overlay" onclick="overlay();"></div>
+        <div class="popup-window shadow-lg border-top">
+            <div class="mb-4 fw-600">
+                <div class="list-item-wrapper" onclick="delete_message();">
+                    <div class="list-item-icon material-icons">delete</div>
+                    <div class="list-item-content">Delete</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

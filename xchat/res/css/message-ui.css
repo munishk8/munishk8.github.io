@@ -1,0 +1,113 @@
+:root {
+    --send-bg: #ffe6ee;
+    --send-color: #111b21;
+    --receive-bg: #e5e5ea;
+    --receive-text: #000000;
+    --page-background: white;
+}
+
+.chat-window-wrapper {
+    /* font-size: 14px; */
+    padding: 20px 20px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    /* background-color: var(--page-background); */
+}
+
+.message-body-sent,
+.message-body-received {
+    /* border: 1px solid red; */
+    max-width: 70vw;
+    word-wrap: break-word;
+    margin-top: 4px;
+    line-height: 24px;
+    position: relative;
+    padding: 6px 12px;
+    border-radius: 25px;
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); */
+    /* border: 1px solid #e0e0e0; */
+}
+
+/* .message-body-sent:before,
+.message-body-sent:after,
+.message-body-received:before,
+.message-body-received:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    height: 25px;
+}
+
+
+
+.message-body-sent:before {
+    right: -7px;
+    width: 20px;
+    background-color: var(--send-bg);
+    border-bottom-left-radius: 16px 14px;
+}
+
+.message-body-sent:after {
+    right: -26px;
+    width: 26px;
+    background-color: var(--page-background);
+    border-bottom-left-radius: 10px;
+}
+
+
+.message-body-received:before {
+    left: -7px;
+    width: 20px;
+    background-color: var(--receive-bg);
+    border-bottom-right-radius: 16px 14px;
+}
+
+.message-body-received:after {
+    left: -26px;
+    width: 26px;
+    background-color: var(--page-background);
+    border-bottom-right-radius: 10px;
+} */
+
+.message-body-sent {
+    color: var(--send-color);
+    background: var(--send-bg);
+    align-self: flex-end;
+    /* margin-right: 20px; */
+}
+.message-body-received {
+    background: var(--receive-bg);
+    color: black;
+    align-self: flex-start;
+    /* margin-left: 20px; */
+}
+
+.message-status-indicator {
+    display: flex;
+    justify-content: end;
+    padding: 2px 4px;
+    font-size: 11px;
+    color: #a0a0a0;
+    /* margin-top: -5px; */
+}
+
+.message-meta {
+    display: none;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: end;
+}
+
+.message-content {
+    font-size: 14px;
+}
+
+.message-time {
+    font-size: 10px;
+    margin: 0 6px;
+}
+
+.message-status {
+    font-family: "Material Icons";
+}
