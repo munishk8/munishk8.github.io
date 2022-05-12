@@ -257,13 +257,18 @@ function friendsActivity(moveToActivity = true) {
         if (connections.length > 0) {
             let first = true;
             connections.forEach((element) => {
+                console.log("putting data");
                 checkProfileConnection(element.otherProfileID, (connectionStatus) => {
                     if (connectionStatus == "connected") {
                         if (first) {
+                            console.log("Was first cleared.");
                             container.html("");
                             first = false;
+                        } else {
+                            console.log("Was not first to skippped clear");
                         }
                         getProfileData(element.otherProfileID, (data) => {
+                            console.log("Pittdsfsd dfds f",data);
                             container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "", "", "", "messageActivity('" + data.profileID + "');", "profilePage('" + data.profileID + "');"));
                         });
                     }
