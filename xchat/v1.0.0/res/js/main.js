@@ -61,7 +61,8 @@ function activity(id, back = false, keepHistory = true) {
                 if (keepHistory) {
                     activityHistory.push(lastActivity);
                     localStorage.setItem("activityHistory", JSON.stringify(activityHistory));
-                    window.history.pushState(null, null, "?activity=" + id);
+                    // window.history.pushState(null, null, "?activity=" + id);
+                    window.history.pushState(null, null, null);
                 }
             }
             $(".activity").removeClass("activity-back-in");
