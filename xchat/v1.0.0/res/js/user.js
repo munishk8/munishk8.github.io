@@ -531,7 +531,15 @@ function getGroupMessages(otherProfileID, callback) {
         }
     );
 }
+
+var getProfileConversationsLock = false;
+
 function getProfileConversations() {
+    if (getProfileConversationsLock) {
+        console.log("PREVENTED PROFILE CLASH");
+        return;
+    }
+    getProfileConversationsLock = true;
     requestServer(
         "api/getConversations/",
         {
@@ -548,6 +556,7 @@ function getProfileConversations() {
             } else {
                 container.html(`<div class="dead-center text-center p-5"><img src="res/media/${currentTheme}/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Messages, yet.</div><div class="fs-12" style="color: #a0a0a0;">No messages in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
             }
+            getProfileConversationsLock = false;
         }
     );
 }
@@ -585,7 +594,14 @@ function putProfileConversationCard(conversation, container) {
         });
     }
 }
+var getGroupConversationsLock = false;
+
 function getGroupConversations() {
+    if (getGroupConversationsLock) {
+        console.log("PREVENTED GROUP CLASH");
+        return;
+    }
+    getGroupConversationsLock = true;
     let container = $("#activity-dashboard-group-conversations-container");
     if (isProfilePremium) {
         requestServer(
@@ -622,6 +638,7 @@ function getGroupConversations() {
                 } else {
                     container.html(`<div class="dead-center text-center p-5"><img src="res/media/${currentTheme}/no-messages-bird-house.png" style="width: 200px;"><div class="fw-600 fs-16 mb-3">No Groups, yet.</div><div class="fs-12" style="color: #a0a0a0;">No groups in your inbox, yet! Start<br>chatting with people around you.</div><div class="p-5"></div><div class="p-5"></div></div>`);
                 }
+                getGroupConversationsLock = false;
             }
         );
     } else {
