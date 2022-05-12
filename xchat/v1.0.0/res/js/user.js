@@ -268,7 +268,7 @@ function friendsActivity(moveToActivity = true) {
                             console.log("Was not first to skippped clear");
                         }
                         getProfileData(element.otherProfileID, (data) => {
-                            console.log("Pittdsfsd dfds f",data);
+                            console.log("Pittdsfsd dfds f", data);
                             container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "", "", "", "messageActivity('" + data.profileID + "');", "profilePage('" + data.profileID + "');"));
                         });
                     }
@@ -585,7 +585,11 @@ function putProfileConversationCard(conversation, container) {
             time = conversation.conversationLastUpdatedOn.split(" ")[1];
             time = time.split(":")[0] + ":" + time.split(":")[1];
             conversationNewReceived = false;
-            conversationSentStatus = conversation.conversationSentStatus + " at " + time;
+            if (conversation.conversationSentStatus) {
+                conversationSentStatus = conversation.conversationSentStatus + " at " + time;
+            } else {
+                conversationSentStatus = "Tap to chat";
+            }
             conversationReceivedStatus = "";
             if (conversation.conversationNewReceived > 0) {
                 conversationSentStatus = "";
@@ -626,12 +630,14 @@ function getGroupConversations() {
                     container.html(" ");
                     data.conversations.forEach((conversation) => {
                         getGroupData(conversation.otherProfileID, (groupData) => {
-                            date = conversation.conversationLastUpdatedOn.split(" ")[0];
-                            time = conversation.conversationLastUpdatedOn.split(" ")[1];
-                            time = time.split(":")[0] + ":" + time.split(":")[1];
+                            if (conversation.conversationLastUpdatedOn) {
+                                date = conversation.conversationLastUpdatedOn.split(" ")[0];
+                                time = conversation.conversationLastUpdatedOn.split(" ")[1];
+                                time = time.split(":")[0] + ":" + time.split(":")[1];
+                            }
                             conversationNewReceived = false;
                             // conversationSentStatus = conversation.conversationSentStatus + " at " + time;
-                            conversationSentStatus = "You sent a message";
+                            conversationSentStatus = group.groupUsername;
                             conversationReceivedStatus = "";
                             if (conversation.conversationNewReceived > 0) {
                                 conversationSentStatus = "";
@@ -1291,7 +1297,6 @@ function requestsActivity(moveToActivity = true) {
 let searchProfilesGroupInviteLock = false;
 
 function searchProfilesGroupInvite(keyword) {
-
     if (searchProfilesGroupInviteLock) {
         return;
     }
