@@ -1,0 +1,136 @@
+.activity {
+    animation: activity-in 500ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+.activity-visible-reload {
+    animation: activity-reload 500ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+.activity-back-in {
+    animation: activity-back-in 500ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+.activity-out {
+    animation: activity-out 500ms;
+    z-index: 1;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+.activity-static-visible {
+    animation: activity-static-visible 200ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+.activity-static-out {
+    animation: activity-static-out 200ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes activity-static-visible {
+    0% {
+        opacity: 0;
+    }
+}
+@keyframes activity-static-out {
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes activity-in {
+    0% {
+        transform: translateX(200px) translateZ(0);
+    }
+    50% {
+        transform: translateX(-10px) translateZ(0);
+    }
+}
+@keyframes activity-reload {
+    0% {
+        transform: translateX(200px) translateZ(0);
+    }
+    50% {
+        transform: translateX(-10px) translateZ(0);
+    }
+}
+@keyframes activity-back-in {
+    0% {
+        transform: translateX(-200px) translateZ(0);
+    }
+    50% {
+        transform: translateX(10px) translateZ(0);
+    }
+}
+
+@keyframes activity-out {
+    100% {
+        opacity: 0;
+        transform: scale(0.8) translateZ(0);
+    }
+}
+
+.popup-backdrop {
+    animation: popup-backdrop-in 200ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.popup-window {
+    animation: popup-window-in 200ms;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes popup-window-in {
+    0% {
+        opacity: 0;
+        transform: translateY(200px) translateZ(0);
+    }
+}
+
+@keyframes popup-backdrop-in {
+    0% {
+        opacity: 0;
+    }
+}
+
+.popup-window-out {
+    animation: popup-window-out 200ms ease-in forwards !important;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes popup-window-out {
+    100% {
+        opacity: 0;
+        transform: translateY(200px) translateZ(0);
+    }
+}
+
+.popup-backdrop-out {
+    animation: popup-backdrop-out 200ms forwards !important;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes popup-backdrop-out {
+    100% {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+}
+
+.fade-pop {
+    animation: fade-pop 200ms;
+}
+
+@keyframes fade-pop {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) translateZ(0);
+    }
+}

@@ -1,0 +1,16 @@
+:root {
+    --primary-color: #ffffff;
+    --primary-background-color: #dc3545;
+    --secondary-color: #202020;
+    --secondary-background-color: #ffffff;
+    --app-bar-color: #202020;
+    --app-bar-background-color: #ffffff;
+    --app-bar-border-color: #f0f0f0;
+    /* --primary-color: #ffffff;
+    --primary-background-color: #dc3545;
+    --secondary-color: #ffffff;
+    --secondary-background-color: #101010;
+    --app-bar-color: #ffffff;
+    --app-bar-background-color: #202020;
+    --app-bar-border-color: #303030; */
+}
