@@ -264,7 +264,7 @@ function friendsActivity(moveToActivity = true) {
                             first = false;
                         }
                         getProfileData(element.otherProfileID, (data) => {
-                            profileCard(container, data.profileName, "", data.profileUsername, data.profileIconPath, "", "", "", "messageActivity('" + data.profileID + "');", "profilePage('" + data.profileID + "');");
+                            container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "", "", "", "messageActivity('" + data.profileID + "');", "profilePage('" + data.profileID + "');"));
                         });
                     }
                 });
@@ -285,7 +285,7 @@ function friendsActivity(moveToActivity = true) {
                                 first = false;
                             }
                             getGroupData(element.otherProfileID, (data) => {
-                                profileCard(container, data.groupName, "", data.groupUsername, data.groupIconPath, "", "", "", "groupMessageActivity('" + data.groupID + "')", "groupPage('" + data.groupID + "')");
+                                container.append(profileCard(data.groupName, "", data.groupUsername, data.groupIconPath, "", "", "", "groupMessageActivity('" + data.groupID + "')", "groupPage('" + data.groupID + "')"));
                             });
                         }
                     });
@@ -338,14 +338,14 @@ function groupPage(otherProfileID, moveToActivity = true) {
                             getProfileData(member.otherProfileID, (element) => {
                                 if (element.profileID == activeUserData.profileID) {
                                     if (element.profileID == data.groupOwnerProfileID) {
-                                        profileCard(container, element.profileName, "You", "", element.profileIconPath, "Admin", "", "", "", "", "fw-600 disabled");
+                                        container.append(profileCard(element.profileName, "You", "", element.profileIconPath, "Admin", "", "", "", "", "fw-600 disabled"));
                                     } else {
-                                        profileCard(container, element.profileName, "You", "", element.profileIconPath);
+                                        container.append(profileCard(element.profileName, "You", "", element.profileIconPath));
                                     }
                                 } else if (element.profileID == data.groupOwnerProfileID) {
-                                    profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Admin", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "fw-600 disabled");
+                                    container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Admin", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "fw-600 disabled"));
                                 } else {
-                                    profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "");
+                                    container.append(profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", ""));
                                 }
                             });
                         });
@@ -377,14 +377,14 @@ function groupPage(otherProfileID, moveToActivity = true) {
                                         getProfileData(member.otherProfileID, (element) => {
                                             if (element.profileID == activeUserData.profileID) {
                                                 if (element.profileID == data.groupOwnerProfileID) {
-                                                    profileCard(container, element.profileName, "You", "", element.profileIconPath, "Admin", "", "", "", "", "fw-600 disabled");
+                                                    container.append(profileCard(element.profileName, "You", "", element.profileIconPath, "Admin", "", "", "", "", "fw-600 disabled"));
                                                 } else {
-                                                    profileCard(container, element.profileName, "You", "", element.profileIconPath);
+                                                    container.append(profileCard(element.profileName, "You", "", element.profileIconPath));
                                                 }
                                             } else if (element.profileID == data.groupOwnerProfileID) {
-                                                profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Admin", "", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "fw-600 disabled");
+                                                container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Admin", "", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "fw-600 disabled"));
                                             } else {
-                                                profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "");
+                                                container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", ""));
                                             }
                                         });
                                     });
@@ -591,7 +591,7 @@ function putProfileConversationCard(conversation, container) {
                     conversationReceivedStatus = conversationNewReceived + " new messages";
                 }
             }
-            profileCard(container, profileData.profileName, conversationReceivedStatus, conversationSentStatus, profileData.profileIconPath, "", "", conversationNewReceived, `messageActivity(${conversation.otherProfileID})`, `profilePage(${conversation.otherProfileID})`);
+            container.append(profileCard(profileData.profileName, conversationReceivedStatus, conversationSentStatus, profileData.profileIconPath, "", "", conversationNewReceived, `messageActivity(${conversation.otherProfileID})`, `profilePage(${conversation.otherProfileID})`));
             putProfileConversationCardLock = false;
             if (putProfileConversationCardLag.length > 0) {
                 let next = putProfileConversationCardLag.pop();
@@ -638,7 +638,7 @@ function getGroupConversations() {
                                 }
                             }
                             // var groupData = groupData;
-                            profileCard(container, groupData.groupName, conversationReceivedStatus, conversationSentStatus, groupData.groupIconPath, "", "", conversationNewReceived, `groupMessageActivity(${conversation.otherProfileID})`, `groupPage(${conversation.otherProfileID})`);
+                            container.append(profileCard(groupData.groupName, conversationReceivedStatus, conversationSentStatus, groupData.groupIconPath, "", "", conversationNewReceived, `groupMessageActivity(${conversation.otherProfileID})`, `groupPage(${conversation.otherProfileID})`));
                         });
                     });
                 } else {
@@ -662,7 +662,7 @@ function getMyGroups() {
             if (data.length > 0) {
                 container.html("");
                 data.forEach((group) => {
-                    profileCard(container, group.groupName, "", group.groupUsername, group.groupIconPath, "Manage", "", "", `groupPage(${group.groupID})`, `groupPage(${group.groupID})`, "group");
+                    container.append(profileCard(group.groupName, "", group.groupUsername, group.groupIconPath, "Manage", "", "", `groupPage(${group.groupID})`, `groupPage(${group.groupID})`, "group"));
                 });
             }
         }
@@ -868,9 +868,9 @@ function manageGroupMembersActivity() {
             members.forEach((element) => {
                 getProfileData(element.otherProfileID, (data) => {
                     if (data.profileID == activeUserData.profileID) {
-                        profileCard(container, data.profileName, "", data.profileUsername, data.profileIconPath, "Admin", "", "", "", "", "btn disabled fw-600 fs-12");
+                        container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "Admin", "", "", "", "", "btn disabled fw-600 fs-12"));
                     } else {
-                        profileCard(container, data.profileName, "", data.profileUsername, data.profileIconPath, "Remove", "manageActiveGroupConnection('" + data.profileID + "','deleteConnection')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')", "btn btn-outline-secondary");
+                        container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "Remove", "manageActiveGroupConnection('" + data.profileID + "','deleteConnection')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')", "btn btn-outline-secondary"));
                     }
                 });
             });
@@ -1214,7 +1214,7 @@ function requestsActivity(moveToActivity = true) {
                             first = false;
                         }
                         getProfileData(element.otherProfileID, (data) => {
-                            profileCard(container, data.profileName, "", data.profileUsername, data.profileIconPath, "Accept", "manageProfileConnection('" + data.profileID + "', 'acceptRequest')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')");
+                            container.append(profileCard(data.profileName, "", data.profileUsername, data.profileIconPath, "Accept", "manageProfileConnection('" + data.profileID + "', 'acceptRequest')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')"));
                         });
                     }
                 });
@@ -1237,7 +1237,7 @@ function requestsActivity(moveToActivity = true) {
                                 first = false;
                             }
                             getGroupData(element.otherProfileID, (data) => {
-                                profileCard(container2, data.groupName, "", "Invited You to join", data.groupIconPath, "Accept", "manageGroupConnection('" + data.groupID + "', 'acceptRequest')", "", "groupPage('" + data.groupID + "')", "groupPage('" + data.groupID + "')");
+                                container2.append(profileCard(data.groupName, "", "Invited You to join", data.groupIconPath, "Accept", "manageGroupConnection('" + data.groupID + "', 'acceptRequest')", "", "groupPage('" + data.groupID + "')", "groupPage('" + data.groupID + "')"));
                             });
                         }
                     });
@@ -1269,7 +1269,7 @@ function requestsActivity(moveToActivity = true) {
                             }
                             getProfileData(element.otherProfileID, (data) => {
                                 getGroupData(element.activeProfileID, (groupData) => {
-                                    profileCard(container, data.profileName, "", "Wants to join " + groupData.groupName, data.profileIconPath, "Accept", "activeGroupID = " + groupData.groupID + ";manageActiveGroupConnection('" + data.profileID + "', 'acceptRequest')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')");
+                                    container.append(profileCard(data.profileName, "", "Wants to join " + groupData.groupName, data.profileIconPath, "Accept", "activeGroupID = " + groupData.groupID + ";manageActiveGroupConnection('" + data.profileID + "', 'acceptRequest')", "", "profilePage('" + data.profileID + "')", "profilePage('" + data.profileID + "')"));
                                 });
                             });
                         }
@@ -1312,16 +1312,16 @@ function searchProfilesGroupInvite(keyword) {
                         let element = data[i];
                         checkActiveGroupConnection(element.profileID, (isConnected) => {
                             if (isConnected == "connected") {
-                                profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Remove", "manageActiveGroupConnection('" + element.profileID + "', 'deleteConnection')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary");
+                                container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Remove", "manageActiveGroupConnection('" + element.profileID + "', 'deleteConnection')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary"));
                             } else if (isConnected == "sent-request") {
-                                profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Cancel", "manageActiveGroupConnection('" + element.profileID + "', 'deleteConnection')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary");
+                                container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Cancel", "manageActiveGroupConnection('" + element.profileID + "', 'deleteConnection')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary"));
                             } else if (isConnected == "received-request") {
-                                profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Accept", "manageActiveGroupConnection('" + element.profileID + "', 'acceptRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary");
+                                container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Accept", "manageActiveGroupConnection('" + element.profileID + "', 'acceptRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "btn-outline-secondary"));
                             } else {
                                 if (element.profileAccessType == "private") {
-                                    profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Invite", "manageActiveGroupConnection('" + element.profileID + "', 'sendRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');");
+                                    container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Invite", "manageActiveGroupConnection('" + element.profileID + "', 'sendRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');"));
                                 } else if (element.profileAccessType == "public") {
-                                    profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "Add", "manageActiveGroupConnection('" + element.profileID + "', 'sendRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');");
+                                    container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Add", "manageActiveGroupConnection('" + element.profileID + "', 'sendRequest')", "", "profilePage('" + element.profileID + "');", "profilePage('" + element.profileID + "');"));
                                 }
                             }
                         });
@@ -1352,7 +1352,7 @@ function searchProfiles(keyword) {
                     container.html("");
                     for (let i = 0; i < data.length; i++) {
                         let element = data[i];
-                        profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "profilePage('" + element.profileID + "');");
+                        container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "profilePage('" + element.profileID + "');"));
                     }
                 }
             }
@@ -1383,7 +1383,7 @@ function searchGroups(keyword) {
                     container.html("");
                     for (let i = 0; i < data.length; i++) {
                         let element = data[i];
-                        profileCard(container, element.groupName, "", element.groupUsername, element.groupIconPath, "", "", "", "groupPage('" + element.groupID + "');", "", "group");
+                        container.append(profileCard(element.groupName, "", element.groupUsername, element.groupIconPath, "", "", "", "groupPage('" + element.groupID + "');", "", "group"));
                     }
                 }
             }
@@ -1540,7 +1540,7 @@ function getMessageDeliveryStatus() {
                     } else if (status.messageStatus == "Seen") {
                         statusString = "Seen at " + getMessageTime(status.messageSeenOn);
                     }
-                    profileCard(container, profileData.profileName, "", statusString, profileData.profileIconPath, "", "", "", "profilePage(" + profileData.profileID + ")", "profilePage(" + profileData.profileID + ")");
+                    container.append(profileCard(profileData.profileName, "", statusString, profileData.profileIconPath, "", "", "", "profilePage(" + profileData.profileID + ")", "profilePage(" + profileData.profileID + ")"));
                 });
             });
         }

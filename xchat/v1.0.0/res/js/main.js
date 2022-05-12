@@ -172,33 +172,10 @@ window.onpopstate = () => {
     activityBack();
 };
 
-var profileCardLag = [];
-var profileCardLock = false;
-
-function profileCard(container, contentLabel = "", contentTextActive = "", contentText = "", image = "", controlButtonLabel = "", controlButtonAction = "", newNotifications = 0, contentClickAction = "", imageClickAction = "", controlButtonStyle = "btn-danger", cardType = "profile") {
-    if (profileCardLock) {
-        console.log("profileCard locked");
-        profileCardLag.push({
-            container: container,
-            contentLabel: contentLabel,
-            contentTextActive: contentTextActive,
-            contentText: contentText,
-            image: image,
-            controlButtonLabel: controlButtonLabel,
-            controlButtonAction: controlButtonAction,
-            newNotifications: newNotifications,
-            contentClickAction: contentClickAction,
-            imageClickAction: imageClickAction,
-            controlButtonStyle: controlButtonStyle,
-            cardType: cardType,
-        });
-        return;
-    } else {
-        console.log("profile card");
-        profileCardLock = true;
-        let controlButton = `<button class="btn btn-sm w-100 ${controlButtonStyle}" onclick="${controlButtonAction}">${controlButtonLabel}</button>`;
-        let notificationBadge = `<div class="profile-card-meta-badge">${newNotifications}</div>`;
-        let element = `
+function profileCard(contentLabel = "", contentTextActive = "", contentText = "", image = "", controlButtonLabel = "", controlButtonAction = "", newNotifications = 0, contentClickAction = "", imageClickAction = "", controlButtonStyle = "btn-danger", cardType = "profile") {
+    let controlButton = `<button class="btn btn-sm w-100 ${controlButtonStyle}" onclick="${controlButtonAction}">${controlButtonLabel}</button>`;
+    let notificationBadge = `<div class="profile-card-meta-badge">${newNotifications}</div>`;
+    let element = `
         <div class="profile-card fade-pop">
             <div class="profile-card-image" style="background-image: url('${image}');${cardType == "group" ? "" : ""}" onclick="${imageClickAction}"></div>
             <div class="profile-card-content" onclick="${contentClickAction}">
@@ -217,14 +194,7 @@ function profileCard(container, contentLabel = "", contentTextActive = "", conte
                 ${newNotifications ? notificationBadge : ""}
             </div>
         </div>`;
-        container.append(element);
-        profileCardLock = false;
-        if (profileCardLag.length) {
-            console.log("tacking lack");
-            let next = profileCardLag.pop();
-            profileCard(next.container, next.contentLabel, next.contentTextActive, next.contentText, next.image, next.controlButtonLabel, next.controlButtonAction, next.newNotifications, next.contentClickAction, next.imageClickAction, next.controlButtonStyle, next.cardType);
-        }
-    }
+    return element;
 }
 function requestServer(url, data, callback, showLoading = true) {
     flags["ongoingServerRequest"] = true;
