@@ -1,0 +1,11 @@
+{
+    "liveServer.settings.port": 8002,
+    "liveServer.settings.https": {
+        "enable": true,
+        // "cert": "D:\\Munish\\apps\\xampp\\apache\\crt\\localhost\\server.crt",
+        // "key": "D:\\Munish\\apps\\xampp\\apache\\crt\\localhost\\server.key",
+        "cert": "C:\\Storage\\apps\\xampp\\apache\\crt\\localhost\\server.crt",
+        "key": "C:\\Storage\\apps\\xampp\\apache\\crt\\localhost\\server.key",
+        "passphrase": ""
+    }
+}

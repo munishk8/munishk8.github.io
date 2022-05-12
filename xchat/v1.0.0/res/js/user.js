@@ -240,7 +240,14 @@ function enablePremiumTrial() {
         }
     };
 }
+
+let friendsActivityLock = false;
+
 function friendsActivity(moveToActivity = true) {
+    if (friendsActivityLock) {
+        return;
+    }
+    friendsActivityLock = true;
     if (moveToActivity) {
         activity("activity-friends");
     }
@@ -264,9 +271,7 @@ function friendsActivity(moveToActivity = true) {
             });
         }
     });
-
     let container = $("#activity-friends-groups-container");
-
     if (isProfilePremium) {
         container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 120px;"><div class="text-muted fw-500 fs-12 text-center">No Groups Yet</div></div>`);
         getGroupConnections((connections) => {
@@ -291,6 +296,7 @@ function friendsActivity(moveToActivity = true) {
     } else {
         container.html(getPremiumElement);
     }
+    friendsActivityLock = false;
 }
 function groupPage(otherProfileID, moveToActivity = true) {
     if (moveToActivity) {
@@ -1183,7 +1189,14 @@ function putMessage(message, container, custom = "") {
         }
     }
 }
+
+var requestsActivityLock = false;
+
 function requestsActivity(moveToActivity = true) {
+    if (requestsActivityLock) {
+        return;
+    }
+    requestsActivityLock = true;
     if (moveToActivity) {
         activity("activity-requests");
     }
@@ -1267,8 +1280,19 @@ function requestsActivity(moveToActivity = true) {
     } else {
         container.html(getPremiumElement);
     }
+    requestsActivityLock = false;
 }
+
+let searchProfilesGroupInviteLock = false;
+
 function searchProfilesGroupInvite(keyword) {
+
+    if (searchProfilesGroupInviteLock) {
+        return;
+    }
+
+    searchProfilesGroupInviteLock = true;
+
     const container = $("#groupInviteSearchResults");
     if (keyword) {
         keyword = keyword.toLowerCase();
@@ -1308,6 +1332,7 @@ function searchProfilesGroupInvite(keyword) {
     } else {
         container.html(`<div class="dead-center"><img src="res/media/${currentTheme}/empty-box.png" style="width: 150px;"><div class="fs-12 fw-500 text-muted">Start typing in the search box</div><div class="p-5"></div></div>`);
     }
+    searchProfilesGroupInviteLock = false;
 }
 function searchProfiles(keyword) {
     const container = $("#tabProfileSearchResult");
