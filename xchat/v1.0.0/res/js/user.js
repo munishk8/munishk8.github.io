@@ -637,7 +637,7 @@ function getGroupConversations() {
                             }
                             conversationNewReceived = false;
                             // conversationSentStatus = conversation.conversationSentStatus + " at " + time;
-                            conversationSentStatus = group.groupUsername;
+                            conversationSentStatus = groupData.groupUsername;
                             conversationReceivedStatus = "";
                             if (conversation.conversationNewReceived > 0) {
                                 conversationSentStatus = "";
