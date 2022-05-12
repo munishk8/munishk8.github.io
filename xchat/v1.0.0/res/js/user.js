@@ -350,7 +350,7 @@ function groupPage(otherProfileID, moveToActivity = true) {
                                 } else if (element.profileID == data.groupOwnerProfileID) {
                                     container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "Admin", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", "fw-600 disabled"));
                                 } else {
-                                    container.append(profileCard(container, element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", ""));
+                                    container.append(profileCard(element.profileName, "", element.profileUsername, element.profileIconPath, "", "", "", "messageActivity('" + element.profileID + "');", "profilePage('" + element.profileID + "');", ""));
                                 }
                             });
                         });
