@@ -459,9 +459,9 @@ $(window).on("load", () => {
                 activeUserData = data.userData;
                 localStorage.setItem("activeUserData", JSON.stringify(activeUserData));
 
-                if (windowURL.searchParams.has("activity")) {
-                    defaultActivity = windowURL.searchParams.get("activity");
-                }
+                // if (windowURL.searchParams.has("activity")) {
+                //     defaultActivity = windowURL.searchParams.get("activity");
+                // }
 
                 if (localStorage.getItem("appLockPIN") !== null) {
                     defaultActivity = "activity-lock-screen";
