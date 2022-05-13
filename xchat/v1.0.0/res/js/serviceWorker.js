@@ -31,6 +31,10 @@ self.addEventListener("push", (event) => {
             self.registration.showNotification(data.from, {
                 body: data.from + " requested to be your friend!",
                 icon: data.icon,
+                actions: [
+                    { action: "open", title: "Open" },
+                    { action: "close", title: "Close" },
+                ],
             })
         );
     } else if (data.type === "friendRequestAccepted") {
@@ -38,6 +42,10 @@ self.addEventListener("push", (event) => {
             self.registration.showNotification(data.from, {
                 body: data.from + " accepted your friend request!",
                 icon: data.icon,
+                actions: [
+                    { action: "open", title: "Open" },
+                    { action: "close", title: "Close" },
+                ],
             })
         );
     }

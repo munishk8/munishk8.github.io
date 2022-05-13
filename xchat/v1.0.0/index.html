@@ -15,8 +15,9 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.2.0/bcrypt.min.js" integrity="sha512-BJZhA/ftU3DVJvbBMWZwp7hXc49RJHq0xH81tTgLlG16/OkDq7VbNX6nUnx+QY4bBZkXtJoG0b0qihuia64X0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.2.0/bcrypt.min.js" integrity="sha512-BJZhA/ftU3DVJvbBMWZwp7hXc49RJHq0xH81tTgLlG16/OkDq7VbNX6nUnx+QY4bBZkXtJoG0b0qihuia64X0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="res/js/bcrypt.min.js"></script>
     <script src="res/js/index.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -559,11 +560,11 @@
         <div class="popup-backdrop" onclick="popup();"></div>
         <div class="popup-window">
             <div class="overflow-auto" style="margin-right: 10px;">
-                <button class="menu-item" onclick="activity('activity-requests')">
+                <button class="menu-item" onclick="activity('activity-requests');">
                     <div class="menu-item-icon">favorite_outline</div>
                     <div class="menu-item-label">Activity and Requests</div>
                 </button>
-                <button class="menu-item" onclick="activity('activity-friends')">
+                <button class="menu-item" onclick="activity('activity-friends');">
                     <div class="menu-item-icon">workspaces</div>
                     <div class="menu-item-label">Groups and Friends</div>
                 </button>

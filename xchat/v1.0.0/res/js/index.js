@@ -1,5 +1,5 @@
-const serverURL = "https://localhost/XCHAT/server/";
-// const serverURL = "https://munish11.000webhostapp.com/XCHAT/v1.0.0/server/";
+// const serverURL = "https://localhost/XCHAT/server/";
+const serverURL = "https://munish11.000webhostapp.com/XCHAT/v1.0.0/server/";
 var currentActivity = null;
 var activityHistory = [];
 var activityHistory = localStorage.getItem("activityHistory") ? JSON.parse(localStorage.getItem("activityHistory")) : [];
