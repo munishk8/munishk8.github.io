@@ -1,3 +1,468 @@
+const serverURL = "https://localhost/XCHAT/server/";
+// const serverURL = "https://munish11.000webhostapp.com/XCHAT/v1.0.0/server/";
+var currentActivity = null;
+var activityHistory = [];
+var activityHistory = localStorage.getItem("activityHistory") ? JSON.parse(localStorage.getItem("activityHistory")) : [];
+var activityLag = [];
+var closeButton = `<button id="popup-message-close-button" class="btn btn-danger px-5  overflow-auto" onclick="popup();">Close</button>`;
+var activeUserData = {};
+var otherUserData = {};
+var activityMessagingMessageType = "";
+var currentTab = "";
+var isCurrentPopupDismissable = true;
+var bcrypt = dcodeIO.bcrypt;
+var permission;
+var isBrowserSupported = false;
+var VAPIDPublicKey = null;
+var serviceWorkerRegistration = null;
+var pushSubscription = null;
+var debug = true;
+var activeGroupID = null;
+var currentTheme = "theme-light";
+var flags = {
+    activityLock: false,
+    ongoingServerRequest: false,
+    signupAllowed: false,
+};
+var popupPromptCallback = () => {
+    console.log("ERROR: No callback defined");
+};
+var popupInputCallback = (value) => {
+    console.log("ERROR: No callback defined");
+};
+
+$(window).on("load", () => {
+    var windowURL = new URL(window.location.href);
+    let defaultActivity = "activity-getting-started";
+    browserSupportCheck();
+    notificationCheck();
+
+    if (localStorage.getItem("color-theme") == "theme-dark") {
+        toggleTheme();
+    }
+
+    let isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
+    if (isUserLoggedIn == "true") {
+        defaultActivity = "activity-dashboard";
+        setTimeout(() => {
+            $("#lock-screen-pin-input").val("");
+            $("#lock-screen-pin-input").focus();
+        }, 500);
+        activeUserData = JSON.parse(localStorage.getItem("activeUserData"));
+        requestServer(
+            "api/getProfileData/",
+            {
+                activeProfileID: activeUserData.profileID,
+                otherProfileID: activeUserData.profileID,
+            },
+            (data) => {
+                activeUserData = data.userData;
+                localStorage.setItem("activeUserData", JSON.stringify(activeUserData));
+
+                // if (windowURL.searchParams.has("activity")) {
+                //     defaultActivity = windowURL.searchParams.get("activity");
+                // }
+
+                if (localStorage.getItem("appLockPIN") !== null) {
+                    defaultActivity = "activity-lock-screen";
+                }
+                activity(defaultActivity);
+            }
+        );
+        profileSubscriptions();
+    } else {
+        activity(defaultActivity);
+    }
+
+    $(".other-user-profile-icon").css("background-image", `url('${activeUserData.profileIconPath}')`);
+
+    $("#image_0001").attr("src", `res/media/${currentTheme}/empty-box.png`);
+});
+navigator.serviceWorker.onmessage = function (event) {
+    if (debug) {
+        console.log("[MESSAGE FROM SREVICE WORKER]", event.data);
+    }
+    if (event.data.type == "newMessage") {
+        getProfileConversations();
+        if (currentActivity == "activity-messaging-view") {
+            messageActivity(otherUserData.profileID);
+        }
+    } else if (event.data.type == "newGroupMessage") {
+        getGroupConversations();
+        if (currentActivity == "activity-group-messaging-view") {
+            groupMessageActivity(otherUserData.groupID);
+        }
+    } else if (event.data.type == "profileConversationUpdate") {
+        getProfileConversations();
+    } else if (event.data.type == "groupConversationUpdate") {
+        getGroupConversations();
+    } else if (event.data.type == "profileMessagesUpdate") {
+        getProfileConversations();
+        if (currentActivity == "activity-messaging-view") {
+            messageActivity(otherUserData.profileID);
+        }
+    } else if (event.data.type == "groupMessagesUpdate") {
+        getGroupConversations();
+        if (currentActivity == "activity-group-messaging-view") {
+            groupMessageActivity(otherUserData.groupID);
+        }
+    }
+};
+function inputImagePreview(e, element) {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.onload = function (e) {
+        element.css("background-image", "url(" + e.target.result + ")");
+    };
+    reader.readAsDataURL(file);
+}
+function activity(id, back = false, keepHistory = true) {
+    if (flags["activityLock"]) {
+        activityLag.push({
+            id: id,
+            back: back,
+        });
+        return;
+    } else {
+        flags["activityLock"] = true;
+        if (!id || !$("#" + id).html()) {
+            id = "activity-fallback";
+        }
+        if (currentActivity == id) {
+            flags["activityLock"] = false;
+            return false;
+        }
+        let lastActivity = currentActivity;
+        currentActivity = id;
+        setTimeout(() => {
+            if (!back && lastActivity) {
+                if (keepHistory) {
+                    activityHistory.push(lastActivity);
+                    localStorage.setItem("activityHistory", JSON.stringify(activityHistory));
+                    // window.history.pushState(null, null, "?activity=" + id);
+                    window.history.pushState(null, null, null);
+                }
+            }
+            $(".activity").removeClass("activity-back-in");
+            $(".activity").removeClass("activity-visible");
+            $(".activity").removeClass("activity-visible-reload");
+
+            $("#" + lastActivity).addClass("activity-visible");
+            $("#" + lastActivity).addClass("activity-out");
+
+            $("#" + id).addClass("activity-visible");
+            if (back) $("#" + id).addClass("activity-back-in");
+
+            if (isCurrentPopupDismissable) {
+                popup();
+            }
+            prepareActivity(id);
+            setTimeout(() => {
+                $("#" + lastActivity).removeClass("activity-visible");
+                $("#" + lastActivity).removeClass("activity-out");
+
+                flags["activityLock"] = false;
+
+                if (activityLag.length) {
+                    next = activityLag.pop();
+                    activity(next.id, next.back);
+                }
+            }, 500);
+        }, 200);
+    }
+}
+function activityBack() {
+    if (flags["activityLock"]) {
+        return false;
+    }
+    window.history.back();
+    let last = activityHistory.pop();
+    localStorage.setItem("activityHistory", JSON.stringify(activityHistory));
+    if (last) {
+        if (last == "activity-dashboard") {
+            getProfileConversations();
+        }
+        activity(last, true);
+    } else {
+        activity("activity-gettingStarted");
+    }
+}
+function popup(id = null) {
+    $("input").blur();
+    if (id) {
+        setTimeout(() => {
+            $(".popup").removeClass("popup-visible");
+            $("#" + id).addClass("popup-visible");
+            $(".popup-backdrop").removeClass("popup-backdrop-out");
+            $(".popup-window").removeClass("popup-window-out");
+        }, 100);
+    } else {
+        isCurrentPopupDismissable = true;
+        setTimeout(() => {
+            $(".popup-backdrop").addClass("popup-backdrop-out");
+            $(".popup-window").addClass("popup-window-out");
+            setTimeout(() => {
+                $(".popup").removeClass("popup-visible");
+            }, 200);
+        }, 0);
+    }
+}
+function loading(state = true) {
+    let loadingActivity = $("#activity-loading");
+    if (state) {
+        loadingActivity.removeClass("activity-static-out");
+        loadingActivity.addClass("activity-static-visible");
+    } else {
+        loadingActivity.addClass("activity-static-out");
+        setTimeout(() => {
+            loadingActivity.removeClass("activity-static-visible");
+        }, 200);
+    }
+}
+function popupMessage(messageLabel = "", messageText = "", messageControls = closeButton, dismissable = true) {
+    isCurrentPopupDismissable = dismissable;
+    $("#popup-message-label").html(messageLabel);
+    $("#popup-message-text").html(messageText);
+    $("#popup-message-controls").html(messageControls);
+    $("#popup-message-backdrop").attr("onclick", `${dismissable ? "popup();" : ""}`);
+    popup("popup-message");
+    setTimeout(() => {
+        $("#popup-message-close-button").focus();
+    }, 500);
+}
+function error() {
+    loading(false);
+    popupMessage("Aww Snap!", "Something went wrong. Please try again later.", closeButton, false);
+}
+function popupInput(label = "Enter Value", value = "", placeholder = "Type here...", type = "text") {
+    let input = $("#popup-input-input");
+    let labelElement = $("#popup-input-label");
+    labelElement.html(label);
+    input.attr("placeholder", placeholder);
+    input.attr("type", type);
+    input.val(value);
+    popup("popup-input");
+    setTimeout(() => {
+        input.focus();
+    }, 300);
+}
+window.onpopstate = () => {
+    activityBack();
+};
+function profileCard(contentLabel = "", contentTextActive = "", contentText = "", image = "", controlButtonLabel = "", controlButtonAction = "", newNotifications = 0, contentClickAction = "", imageClickAction = "", controlButtonStyle = "btn-danger", cardType = "profile") {
+    let controlButton = `<button class="btn btn-sm w-100 ${controlButtonStyle}" onclick="${controlButtonAction}">${controlButtonLabel}</button>`;
+    let notificationBadge = `<div class="profile-card-meta-badge">${newNotifications}</div>`;
+    let element = `
+        <div class="profile-card fade-pop">
+            <div class="profile-card-image" style="background-image: url('${image}');${cardType == "group" ? "" : ""}" onclick="${imageClickAction}"></div>
+            <div class="profile-card-content" onclick="${contentClickAction}">
+                <div class="profile-card-label">
+                    <div>${contentLabel}</div>
+                </div>
+                <div class="profile-card-text-active">
+                    <div>${contentTextActive}</div>
+                </div>
+                <div class="profile-card-text">
+                    ${contentText}
+                </div> 
+            </div>
+            <div class="profile-card-meta">
+                ${controlButtonLabel ? controlButton : ""}
+                ${newNotifications ? notificationBadge : ""}
+            </div>
+        </div>`;
+    return element;
+}
+function requestServer(url, data, callback, showLoading = true) {
+    flags["ongoingServerRequest"] = true;
+    setTimeout(() => {
+        if (showLoading && flags["ongoingServerRequest"]) loading();
+    }, 1000);
+    $.post(serverURL + url, data)
+        .then((res) => {
+            flags["ongoingServerRequest"] = false;
+
+            if (debug) {
+                console.log("~", url, res);
+            }
+
+            if (res.status) {
+                loading(false);
+                callback(res.data);
+            } else {
+                // console.log(res);
+                error();
+            }
+        })
+        .catch((err) => {
+            flags["ongoingServerRequest"] = false;
+            console.log(err);
+            error();
+        });
+}
+function requestServerForm(url, data, callback, showLoading = true) {
+    flags["ongoingServerRequest"] = true;
+    setTimeout(() => {
+        if (showLoading && flags["ongoingServerRequest"]) loading();
+    }, 1000);
+    $.ajax({
+        url: serverURL + url,
+        type: "POST",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: (res) => {
+            flags["ongoingServerRequest"] = false;
+
+            if (debug) {
+                console.log("~", url, res);
+            }
+
+            if (res.status) {
+                loading(false);
+                callback(res.data);
+            } else {
+                console.log(res);
+                error();
+            }
+        },
+        error: (err) => {
+            flags["ongoingServerRequest"] = false;
+            console.log(err);
+            error();
+        },
+    });
+}
+function popupPrompt(label = "Are you sure ?", text = "Do you want to perform the specified action", confirmLabel = "Yes", cancelLabel = "No", dismissable = true) {
+    popupMessage(
+        label,
+        text,
+        `<div class="d-flex w-100">
+            ${confirmLabel ? `<button class="btn btn-danger flex-grow-1" onclick="popupPromptCallback(true); popup();">${confirmLabel}</button>` : ``}
+            <div class="m-1"></div>
+            ${cancelLabel ? `<button class="btn btn-outline-secondary flex-grow-1" onclick="popupPromptCallback(false); popup();">${cancelLabel}</button>` : ``}
+        </div > `,
+        dismissable
+    );
+}
+function tabs(tabContainer, tabID, elem) {
+    // alert("cll");
+    $(`#${tabContainer}Container`).css("transform", `translateX(-${tabID * 100}vw) translateZ(0)`);
+    $(`#${tabContainer}Header`).children(".tab-header").removeClass("tab-header-active");
+    $(elem).addClass("tab-header-active");
+    currentTab = tabContainer + tabID;
+}
+function browserSupportCheck() {
+    if (!("serviceWorker" in navigator)) {
+        console.log("Service Worker is not supported in this browser");
+        popupMessage("Browser not supported", "This browser is not supported by this app. This app may not function as intended. If you still want to try it out click the continue button. [SW]", `<button class="btn btn-danger w-100" onclick="popup();">Continue</button>`, false);
+        return;
+    } else if (!("PushManager" in window)) {
+        console.log("Push is not supported in this browser");
+        popupMessage("Browser not supported", "This browser is not supported by this app. This app may not function as intended. If you still want to try it out click the continue button. [PM]", `<button class="btn btn-danger w-100" onclick="popup();">Continue</button>`, false);
+        return;
+    } else {
+        isBrowserSupported = true;
+    }
+}
+async function notificationCheck() {
+    if (isBrowserSupported) {
+        let currentNotificationPermission = window.Notification.permission;
+        if (currentNotificationPermission == "granted") {
+            serviceWorkerRegistration = await navigator.serviceWorker.register("./res/js/serviceWorker.js");
+        } else if (currentNotificationPermission == "default") {
+            popupPrompt("Permission", "The app requires notification permission to work properly. Please click allow and grant notification permission.", "Allow", "", false);
+            popupPromptCallback = (action) => {
+                if (action) {
+                    requestNotificationPermission();
+                }
+            };
+        } else if (currentNotificationPermission == "denied") {
+            setTimeout(() => {
+                popupMessage("Blocked Permission", "The app may not work properly. Please allow notification permissions to the app.", "");
+            }, 500);
+            return;
+        }
+    }
+}
+async function requestNotificationPermission() {
+    permission = await window.Notification.requestPermission();
+    notificationCheck();
+}
+function urlB64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+function prepareActivity(id) {
+    switch (id) {
+        case "activity-dashboard":
+            getProfileConversations();
+            getGroupConversations();
+            break;
+        case "activity-requests":
+            requestsActivity();
+            break;
+        case "activity-friends":
+            friendsActivity();
+            break;
+        case "activity-manange-group-members":
+            manageGroupMembersActivity();
+            break;
+        case "activity-my-account":
+            profileDetails();
+            break;
+        case "activity-group-details":
+            groupDetails();
+            break;
+        case "activity-settings":
+            break;
+        case "activity-subscriptions":
+            profileSubscriptions();
+            break;
+        case "activity-create-new-group":
+            if (!isProfilePremium) {
+                $("#activity-create-new-group-container").addClass("d-none");
+                $("#activity-create-new-group-non-premium-container").html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
+            } else {
+                $("#activity-create-new-group-container").removeClass("d-none");
+                $("#activity-create-new-group-non-premium-container").empty();
+            }
+            break;
+        case "activity-search":
+            $("#activity-search-search-box").val();
+            $("#activity-search-search-box").focus();
+            searchProfiles("");
+            searchGroups("");
+            break;
+        default:
+            break;
+    }
+}
+function toggleTheme() {
+    var button = $("#activity-settings-dark-theme-toggle");
+
+    $("body").toggleClass("theme-dark");
+    if ($("body").hasClass("theme-dark")) {
+        currentTheme = "theme-dark";
+        button.html("toggle_on");
+        localStorage.setItem("color-theme", "theme-dark");
+    } else {
+        currentTheme = "theme-light";
+        button.html("toggle_off");
+        localStorage.removeItem("color-theme");
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+
 var isProfilePremium = false;
 var putMessageLag = [];
 var putMessageLock = false;
@@ -5,7 +470,14 @@ var putMessageLast = null;
 var activeMessageID = null;
 var putMessageLastMessageDate = null;
 var getPremiumElement = `<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div>`;
-var getPremiumElementFull = `<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`;
+// var getPremiumElementFull = `<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`;
+let friendsActivityLock = false;
+var getProfileConversationsLock = false;
+var putProfileConversationCardLock = false;
+var putProfileConversationCardLag = [];
+var getGroupConversationsLock = false;
+var requestsActivityLock = false;
+let searchProfilesGroupInviteLock = false;
 
 function activityMessagingFileSendOnChange(event) {
     let container = $("#activity-media-preview-container");
@@ -129,6 +601,7 @@ function createNewGroup(e) {
                 processData: false,
                 contentType: false,
                 success: function (res) {
+                    console.log(res);
                     if (res.status) {
                         loading(false);
                         $(".m-input").val("");
@@ -240,9 +713,6 @@ function enablePremiumTrial() {
         }
     };
 }
-
-let friendsActivityLock = false;
-
 function friendsActivity(moveToActivity = true) {
     if (friendsActivityLock) {
         return;
@@ -542,9 +1012,6 @@ function getGroupMessages(otherProfileID, callback) {
         }
     );
 }
-
-var getProfileConversationsLock = false;
-
 function getProfileConversations() {
     if (getProfileConversationsLock) {
         console.log("PREVENTED PROFILE CLASH");
@@ -571,10 +1038,6 @@ function getProfileConversations() {
         }
     );
 }
-
-putProfileConversationCardLock = false;
-putProfileConversationCardLag = [];
-
 function putProfileConversationCard(conversation, container) {
     if (putProfileConversationCardLock) {
         putProfileConversationCardLag.push({ conversation, container });
@@ -609,8 +1072,6 @@ function putProfileConversationCard(conversation, container) {
         });
     }
 }
-var getGroupConversationsLock = false;
-
 function getGroupConversations() {
     if (getGroupConversationsLock) {
         console.log("PREVENTED GROUP CLASH");
@@ -659,7 +1120,7 @@ function getGroupConversations() {
             }
         );
     } else {
-        container.html(getPremiumElementFull);
+        container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
     }
 }
 function getMyGroups() {
@@ -1200,9 +1661,6 @@ function putMessage(message, container, custom = "") {
         }
     }
 }
-
-var requestsActivityLock = false;
-
 function requestsActivity(moveToActivity = true) {
     if (requestsActivityLock) {
         return;
@@ -1293,9 +1751,6 @@ function requestsActivity(moveToActivity = true) {
     }
     requestsActivityLock = false;
 }
-
-let searchProfilesGroupInviteLock = false;
-
 function searchProfilesGroupInvite(keyword) {
     if (searchProfilesGroupInviteLock) {
         return;
@@ -1374,7 +1829,7 @@ function searchProfiles(keyword) {
 function searchGroups(keyword) {
     const container = $("#tabGroupSearchResult");
     if (!isProfilePremium) {
-        container.html(getPremiumElementFull);
+        container.html(`<div class="d-flex flex-grow-1 justify-content-center flex-column align-items-center p-5"><img src="res/media/${currentTheme}/no_messages_purple_bubble.png" style="width: 180px;" class="mb-3"> <span class="text-center fs-12 text-secondary mb-3">Oops! your current subscription plan does not includes Group Messaging.</span><button class="btn btn-danger btn-sm px-5" onclick="activity('activity-subscriptions')">Get Premium</button></div><div class="p-5"></div>`);
         return;
     }
     if (keyword) {
@@ -1685,4 +2140,511 @@ function protectedMessagePreview(messageType, messageKey, messageData, messageFi
             }
         }
     };
+}
+
+// ---------------------------------------------------------------------------------------
+
+function profileSignin(e) {
+    e.preventDefault();
+    let usernameInput = $("#signin_username_input");
+    let passwordInput = $("#signin_password_input");
+    let submitButton = $("#signin_submit_button");
+
+    $("#signin_incorrect").removeClass("is-invalid");
+
+    if (usernameInput.val() == "") {
+        usernameInput.addClass("is-invalid");
+        submitButton.addClass("disabled");
+    } else if (passwordInput.val() == "") {
+        passwordInput.addClass("is-invalid");
+        submitButton.addClass("disabled");
+    } else {
+        submitButton.removeClass("disabled");
+        usernameInput.removeClass("is-invalid");
+        passwordInput.removeClass("is-invalid");
+
+        requestServer(
+            "api/profileSignin/",
+            {
+                profileUsername: usernameInput.val().toLowerCase(),
+                profilePassword: passwordInput.val(),
+            },
+            async (data) => {
+                if (data.signinStatus) {
+                    localStorage.setItem("activeUserData", JSON.stringify(data.userData));
+                    localStorage.setItem("isUserLoggedIn", true);
+                    activeUserData = data.userData;
+
+                    requestServer("api/getVAPIDKeys/", {}, async (data) => {
+                        VAPIDPublicKey = data.publicKey;
+                        const applicationServerKey = urlB64ToUint8Array(VAPIDPublicKey);
+                        const options = {
+                            applicationServerKey,
+                            userVisibleOnly: true,
+                        };
+                        try {
+                            let pushSubscription = await serviceWorkerRegistration.pushManager.getSubscription();
+                            if (pushSubscription) {
+                                await pushSubscription.unsubscribe();
+                                console.log("Service Worker: Registering Push after unsubscribing");
+                                pushSubscription = await serviceWorkerRegistration.pushManager.subscribe(options);
+                                requestServer(
+                                    "api/saveProfileEndpoint/",
+                                    {
+                                        profileID: activeUserData.profileID,
+                                        endpoint: JSON.stringify(pushSubscription),
+                                    },
+                                    (data) => {
+                                        window.history.pushState(null, null, "index.html");
+                                        window.location.reload();
+                                    }
+                                );
+                            } else {
+                                console.log("Service Worker: Registering Push");
+                                pushSubscription = await serviceWorkerRegistration.pushManager.subscribe(options);
+                                requestServer(
+                                    "api/saveProfileEndpoint/",
+                                    {
+                                        profileID: activeUserData.profileID,
+                                        endpoint: JSON.stringify(pushSubscription),
+                                    },
+                                    (data) => {
+                                        window.history.pushState(null, null, "./");
+                                        window.location.reload();
+                                    }
+                                );
+                            }
+                        } catch (err) {
+                            console.log("Service Worker: Error Registering Push", err);
+                            error();
+                        }
+                    });
+                } else {
+                    $("#signin_incorrect").addClass("is-invalid");
+                }
+            }
+        );
+    }
+}
+function profileSignout() {
+    popupPrompt("Sign Out", "Are you sure you want to sign out of your account?");
+    popupPromptCallback = (action) => {
+        if (action) {
+            requestServer(
+                "api/profileSignout/",
+                {
+                    profileID: activeUserData.profileID,
+                },
+                (data) => {
+                    localStorage.clear();
+                    window.history.pushState(null, null, "./");
+                    window.location.reload();
+                }
+            );
+        }
+    };
+}
+
+// -----------------------------------------------------------------------------------------
+
+function signupIsProfileEmailAvailable() {
+    let input = $("#signup_email_address_input");
+    let submit_button = $("#signup_1_submit_button");
+    let invalid_feedback = $("#signup_email_address_invalid_feedback");
+
+    requestServer(
+        "api/isProfileEmailAvailable/",
+        {
+            profileEmail: input.val(),
+        },
+        (data) => {
+            if (data.available) {
+                input.removeClass("is-invalid");
+                submit_button.removeClass("disabled");
+            } else {
+                invalid_feedback.text("This email address is already in use.");
+                input.addClass("is-invalid");
+                submit_button.addClass("disabled");
+            }
+        }
+    );
+}
+function signupSendVerificationCode(e) {
+    e.preventDefault();
+    let input = $("#signup_email_address_input");
+    let profileEmail = input.val();
+    let submitButton = $("#signup_1_submit_button");
+    let invalidFeedback = $("#signup_email_address_invalid_feedback");
+    if (profileEmail.match("^([a-zA-Z0-9-._]+)[@]([a-zA-Z0-9]+)[.]([a-zA-Z0-9]{2,4})$") === null) {
+        invalidFeedback.text("Please enter a valid email address");
+        input.addClass("is-invalid");
+        submitButton.addClass("disabled");
+    } else {
+        popupMessage("Email Verification", "An email is being sent to your email address. Please use the given verification code to verify your email address.", `<div class="spinner-border text-secondary"></div>`);
+        requestServer(
+            "api/sendVerificationCode/",
+            {
+                profileEmail: profileEmail,
+            },
+            (data) => {
+                var hash = bcrypt.hashSync(data.verificationCode.toString(), 10);
+                localStorage.setItem("signupVerificationCode", hash);
+                submitButton.addClass("disabled");
+                popupMessage("Email Verification", "An email is being sent to your email address. Please use the given verification code to verify your email address.", `<div class="btn btn-danger  px-5" onclick="activity('activity-signup-verify-email')">Next</div>`);
+            },
+            false
+        );
+    }
+}
+function signupVerifyEmailClearErrors() {
+    let input = $("#signup_verification_code_input");
+    let submit_button = $("#signup_2_submit_button");
+
+    if (input.val().match("^(\\d{6})$") !== null) {
+        input.removeClass("is-invalid");
+        submit_button.removeClass("disabled");
+    }
+}
+function signupVerifyVerificationCode(e) {
+    e.preventDefault();
+
+    if (localStorage.getItem("signupVerificationCode") == null) {
+        popupMessage("Expired", "Your OTP has been expired. Please send the OTP again.", `<div class="btn btn-danger  px-5" onclick="activity('activity-signup-enter-email')">Try again</div>`);
+        return;
+    }
+
+    let input = $("#signup_verification_code_input");
+    let verificationCode = input.val();
+    let submit_button = $("#signup_2_submit_button");
+    let invalid_feedback = $("#signup_verification_code_invalid_feedback");
+
+    if (verificationCode.match("^(\\d{6})$") === null) {
+        invalid_feedback.text("Please enter a valid code.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+    } else {
+        var hash = localStorage.getItem("signupVerificationCode");
+        if (bcrypt.compareSync(verificationCode, hash)) {
+            localStorage.removeItem("signupVerificationCode");
+            activity("activity-signup-username-setup");
+        } else {
+            submit_button.addClass("disabled");
+            input.addClass("is-invalid");
+            invalid_feedback.text("Incorrect verification code. Try again.");
+        }
+    }
+}
+function signupValidateUsername(callback = null) {
+    let input = $("#signup_username_input");
+    let username = input.val();
+    let invalid_feedback = $("#signup_username_invalid_feedback");
+    let submit_button = $("#signup_3_submit_button");
+
+    if (username == "") {
+        invalid_feedback.text("Please enter username.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else if (username.match("^[a-zA-Z0-9_]+$") === null) {
+        invalid_feedback.text("Username can only have letters, numbers and underscores.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else {
+        if (username.match("^.{4,30}$") === null) {
+            invalid_feedback.text("Should be atleast 4 characters and not more than 30.");
+            input.addClass("is-invalid");
+            submit_button.addClass("disabled");
+        } else {
+            requestServer(
+                "api/isUsernameAvailable/",
+                {
+                    profileUsername: username,
+                },
+                (data) => {
+                    if (data.available) {
+                        input.removeClass("is-invalid");
+                        submit_button.removeClass("disabled");
+                        if (callback) {
+                            callback();
+                        }
+                    } else {
+                        invalid_feedback.text("The username is already taken.");
+                        input.addClass("is-invalid");
+                        submit_button.addClass("disabled");
+                    }
+                }
+            );
+        }
+        // input.focus();
+    }
+}
+function signupValidatePassword() {
+    let input = $("#signup_password_input");
+    let password = input.val();
+    let invalid_feedback = $("#signup_password_invalid_feedback");
+    let submit_button = $("#signup_3_submit_button");
+
+    if (password == "") {
+        invalid_feedback.text("Please enter password.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else if (password.match("^[A-Za-z0-9!@#$%&*_]+$") === null) {
+        invalid_feedback.text("Password can only have letters, numbers and some special symbols.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else if (password.match(".{6,120}$") === null) {
+        invalid_feedback.text("Password must contain atleast 6 chatacters.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else {
+        input.removeClass("is-invalid");
+        submit_button.removeClass("disabled");
+        return true;
+    }
+}
+function signupUsernameSetup(e) {
+    e.preventDefault();
+    signupValidateUsername(() => {
+        if (signupValidatePassword()) {
+            activity("activity-signup-profile-setup");
+        } else {
+            $("#signup_password_input").focus();
+        }
+    });
+}
+function profileSignup(e) {
+    e.preventDefault();
+
+    let name_input = $("#signup_name_input");
+    let submit_button = $("#signup_4_submit_button");
+
+    if (name_input.val() == "") {
+        name_input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+    } else {
+        var signup_form = new FormData();
+
+        signup_form.append("profileEmail", $("#signup_email_address_input").val());
+        signup_form.append("profileUsername", $("#signup_username_input").val().toLowerCase());
+        signup_form.append("profilePassword", $("#signup_password_input").val());
+        signup_form.append("profileName", $("#signup_name_input").val());
+        signup_form.append("profileIcon", $("#signup_profile_picture")[0].files[0]);
+
+        loading();
+        $.ajax({
+            url: serverURL + "api/profileSignup/",
+            type: "POST",
+            data: signup_form,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if (res.status) {
+                    loading(false);
+                    $(".m-input").val("");
+                    popupMessage("Your new account is all set.", "Thank you for creating an account and joining us.", '<div class="btn btn-danger px-5" onclick="activity(\'activity-signin\');popup();">Sign In</div>', false);
+                } else {
+                    console.log(res);
+                    error();
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                error();
+            },
+        });
+    }
+}
+
+// ----------------------------------------------------------------------------------------------
+
+function passwordResetSendVerificationCode(e) {
+    e.preventDefault();
+
+    let input = $("#passwordResetEmailInput");
+    let profileEmail = input.val();
+    let submitButton = $("#passwordResetEnterEmailSubmitButton");
+    let invalidFeedback = $("#passwordResetEmailInvalidFeedback");
+    if (profileEmail.match("^([a-zA-Z0-9-._]+)[@]([a-zA-Z0-9]+)[.]([a-zA-Z0-9]{2,4})$") === null) {
+        invalidFeedback.text("Please enter a valid email address");
+        input.addClass("is-invalid");
+        submitButton.addClass("disabled");
+    } else {
+        requestServer(
+            "api/isProfileEmailAvailable/",
+            {
+                profileEmail: input.val(),
+            },
+            (data) => {
+                if (!data.available) {
+                    input.removeClass("is-invalid");
+                    submitButton.removeClass("disabled");
+                    popupMessage("Email Verification", "An email is being sent to your email address. Please use the given verification code to verify your email address.", `<div class="spinner-border text-secondary"></div>`);
+                    requestServer(
+                        "api/sendVerificationCode/",
+                        {
+                            profileEmail: profileEmail,
+                        },
+                        (data) => {
+                            var hash = bcrypt.hashSync(data.verificationCode.toString(), 10);
+                            localStorage.setItem("passwordResetVerificationCode", hash);
+                            submitButton.addClass("disabled");
+                            popupMessage("Email Verification", "An email is being sent to your email address. Please use the given verification code to verify your email address.", `<div class="btn btn-danger  px-5" onclick="activity('activity-password-reset-verify-email')">Next</div>`);
+                        },
+                        false
+                    );
+                } else {
+                    invalidFeedback.text("");
+                    // invalidFeedback.text(
+                    //     "This email address is not registered with us."
+                    // );
+                    input.addClass("is-invalid");
+                    submitButton.addClass("disabled");
+                    popupMessage("No Account Found", "Sorry, we couldn't find an account with this email address.", `<div class="btn btn-danger  px-5" onclick="popup()">Try again</div>`);
+                }
+            }
+        );
+    }
+}
+function passwordResetVerifyEmailClearErrors() {
+    let input = $("#passwordResetVerificationCodeInput");
+    let submit_button = $("#passwordResetVerifyEmailSubmitButton");
+
+    if (input.val().match("^(\\d{6})$") !== null) {
+        input.removeClass("is-invalid");
+        submit_button.removeClass("disabled");
+    }
+}
+function passwordResetVerifyVerificationCode(e) {
+    e.preventDefault();
+
+    if (localStorage.getItem("passwordResetVerificationCode") == null) {
+        popupMessage("Expired", "Your OTP has been expired. Please send the OTP again.", `<div class="btn btn-danger  px-5" onclick="activity('activity-password-reset-enter-email')">Try again</div>`);
+        return;
+    }
+
+    let input = $("#passwordResetVerificationCodeInput");
+    let verificationCode = input.val();
+    let submit_button = $("#passwordResetVerifyEmailSubmitButton");
+    let invalid_feedback = $("#passwordResetVerificationCodeInvalidFeedback");
+
+    if (verificationCode.match("^(\\d{6})$") === null) {
+        invalid_feedback.text("Please enter a valid code.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+    } else {
+        let hash = localStorage.getItem("passwordResetVerificationCode");
+        if (bcrypt.compareSync(verificationCode, hash)) {
+            localStorage.removeItem("passwordResetVerificationCode");
+            activity("activity-password-reset-new-password");
+        } else {
+            submit_button.addClass("disabled");
+            input.addClass("is-invalid");
+            invalid_feedback.text("Incorrect verification code. Try again.");
+        }
+    }
+}
+function passwordResetValidateNewPassword() {
+    let input = $("#passwordResetNewPasswordInput");
+    let password = input.val();
+    let invalid_feedback = $("#passwordResetNewPasswordInvalidFeedback");
+    let submit_button = $("#passwordResetNewPasswordSubmitButton");
+
+    if (password == "") {
+        invalid_feedback.text("Please enter password.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else if (password.match("^[A-Za-z0-9!@#$%&*]+$") === null) {
+        invalid_feedback.text("Password can only have letters, numbers and some special symbols.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else if (password.match(".{6,120}$") === null) {
+        invalid_feedback.text("Password must contain atleast 6 chatacters.");
+        input.addClass("is-invalid");
+        submit_button.addClass("disabled");
+        return false;
+    } else {
+        input.removeClass("is-invalid");
+        submit_button.removeClass("disabled");
+        return true;
+    }
+}
+function passwordResetNewPassword(e) {
+    e.preventDefault();
+
+    let newPassword = $("#passwordResetNewPasswordInput").val();
+    let confirmPassword = $("#passwordResetConfirmPasswordInput").val();
+
+    if (passwordResetValidateNewPassword()) {
+        if (newPassword == confirmPassword) {
+            requestServer(
+                "api/resetProfilePassword/",
+                {
+                    profileEmail: $("#passwordResetEmailInput").val(),
+                    newProfilePassword: newPassword,
+                },
+                (data) => {
+                    popupMessage("Password Reset", "Your password has been reset successfully.", `<div class="btn btn-danger  px-5" onclick="activity('activity-signin')">Sign in</div>`);
+                }
+            );
+        } else {
+            $("#passwordResetConfirmPasswordInput").addClass("is-invalid");
+            $("#passwordResetConfirmPasswordInvalidFeedback").text("Passwords do not match.");
+        }
+    }
+}
+
+// --------------------------------------------------------------------------------------------
+
+function verifyAppLockPin(e) {
+    e.preventDefault();
+    let input = $("#appLockPINInput");
+    if (bcrypt.compareSync(input.val(), localStorage.getItem("appLockPIN"))) {
+        activity("activity-dashboard");
+    } else {
+        input.addClass("is-invalid");
+    }
+}
+function confirmAppLockPin(e) {
+    e.preventDefault();
+    let input = $("#appLockPINSetInput0");
+    if (input.val().match("^(\\d{4})$") === null) {
+        input.addClass("is-invalid");
+        return;
+    } else {
+        activity("activity-app-lock-create-pin-confirm", false, false);
+    }
+}
+function setAppLockPin(e) {
+    e.preventDefault();
+    let input = $("#appLockPINSetInput1");
+    let pin = input.val();
+    if (pin.match("^(\\d{4})$") === null) {
+        input.addClass("is-invalid");
+        return;
+    } else {
+        if (pin == $("#appLockPINSetInput0").val()) {
+            localStorage.setItem("appLockPIN", bcrypt.hashSync(pin, 10));
+            activity("activity-settings", true, false);
+            popupMessage("Success", "App lock PIN set successfully.", closeButton, false);
+        } else {
+            input.addClass("is-invalid");
+        }
+    }
+}
+function disableAppLock() {
+    if (localStorage.getItem("appLockPIN") === null) {
+        popupMessage("Lock isn't Activated", "You haven't set a PIN yet. Please use create pin option to setup lock.");
+    } else {
+        popupPrompt("Disable App Lock", "Are you sure you want to disable the app lock?");
+        popupPromptCallback = function () {
+            localStorage.removeItem("appLockPIN");
+            activity("activity-settings", true, false);
+        };
+    }
 }
