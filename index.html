@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Uh oh! You're not authorized to access this content.</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link href="infosec-robot.jpg" type="image/x-icon" rel="icon">
+    <style>
+        .isi-page-center {
+            align-items: center;
+            background-color: #005f98;
+            display: flex;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            flex-direction: column;
+            font-family: 'Open Sans', sans-serif;
+            justify-content: center;
+            min-height: 100vh;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .isi-message-wrapper {
+            height: 295px;
+            position: relative;
+            width: 555px;
+        }
+
+        .robot {
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            -webkit-box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .textbox-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 325px;
+            background-color: #f8f8f8;
+            padding: 30px 30px 30px 30px;
+            border-radius: 4px;
+            z-index: 1;
+            -webkit-box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .textbox-wrapper::after {
+            display: block;
+            position: absolute;
+            bottom: -35px;
+            left: 50px;
+            width: 0;
+            height: 0;
+            border-top: 40px solid #f8f8f8;
+            border-right: 40px solid transparent;
+            z-index: 750;
+            content: " ";
+        }
+
+        .textbox-wrapper h1 {
+            color: #005f98;
+            padding: 0;
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4em;
+        }
+
+        .textbox-wrapper .message {
+            color: #005f98;
+            padding: 0;
+            margin: 0;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.4em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="isi-page-center">
+        <div class="isi-message-wrapper">
+            <div class="textbox-wrapper">
+                <h1>Uh oh!</h1>
+                <h1 class="message">Munish don't want you to access this content.</h1>
+            </div>
+            <img alt="Infosec assistant robot image" class="robot" src="infosec-robot.jpg">
+        </div>
+    </div>
+</body>
+
+</html>
