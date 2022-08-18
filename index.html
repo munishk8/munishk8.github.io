@@ -100,6 +100,40 @@
             <img alt="Infosec assistant robot image" class="robot" src="infosec-robot.jpg" style="max-width: 50%;">
         </div>
     </div>
+    Clear-Host
+$log = "log.txt"
+$failedServers = "failed-servers.txt"
+$servers = Get-Content "servers.txt"
+$groups = Get-Content "groups.txt"
+
+"$(Get-Date)`n" | Out-File $log -Append
+"`n$(Get-Date)`n" | Out-File $failedServers -Append 
+
+foreach ($server in $servers) {
+    foreach ($group in $groups) {
+        try {
+            # $AdminGroup = [ADSI]"WinNT://$server/Administrators,group"
+            # $GroupName = [ADSI]"WinNT://munichre.com/$group"
+            # $AdminGroup.Add($GroupName.Path)
+            if ($server -eq "server3.munichre.com") {
+                # throw "Error"
+            }
+            $message = "SUCCESS"
+            $color = "Green"
+        }
+        catch {
+            $message = "FAILED"
+            $color = "Red"
+            "[$message]`tSERVER: $server`tGROUP: $group" | Out-File $failedServers -Append
+        }
+        finally {
+            Write-Host "[$message]`tSERVER: $server`tGROUP: $group"-ForegroundColor $color
+            "[$message]`tSERVER: $server`tGROUP: $group" | Out-File $log -Append 
+        }
+    }
+    Write-Host ""
+    "" | Out-File $log -Append
+}
 </body>
 
 </html>
