@@ -1,1 +1,255 @@
-<!DOCTYPE html><html lang="en"><head><title>Time</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon shortcut" href="icon.8a05bba0.png" type="image/png"><link rel="manifest" href="manifest.webmanifest"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel="stylesheet" href="index.f546a6f9.css"><link rel="stylesheet" href="index.c4c6d475.css"></head><body> <div class="d-flex flex-column flex-grow-1"> <div class="flex-grow-1 task-item"> <div class="border-bottom p-3 task-meta"> <div class="fs-20 fw-600 task-title" contenteditable="true" style="outline:0">Munish's</div> <div class="task-delete-button" onclick="add_task(this);">add</div> </div> <div class="m-0 task-children" style="flex-direction:column-reverse" id="all-tasks"></div> </div> <div class="border-top p-3"> <button class="btn btn-outline-secondary btn-sm" onclick="undo_changes();">Undo</button> <button class="btn btn-outline-secondary btn-sm" onclick="save_state('');">Clear</button> <button class="btn btn-outline-secondary btn-sm" onclick="$('.task-indicator').removeClass('task-indicator-on');">Reset</button> </div> </div>   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin></script> <script src="index.cdbdf13b.js"></script> </body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: "Poppins";
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            /* font-size: 14px; */
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        .e0 {
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #303030;
+        }
+
+        .e1 {
+            /* border: 1px solid #a0a0a0; */
+            /* margin: 20px; */
+            display: flex;
+            background-color: #e0e0e0;
+        }
+
+        .e2 {
+            background-color: #03AC13;
+            height: 10px;
+            width: 0%;
+        }
+
+        #output {
+            padding: 10px;
+            color: white;
+            background-color: #202020;
+            display: flex;
+        }
+
+        .header0 {
+            padding: 20px;
+            border-bottom: 3px solid #e0e0e0;
+        }
+
+        table {
+            font-size: 14px;
+            flex-grow: 1;
+        }
+        td,th {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 2px 6px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header0"></div>
+    <div style="flex-grow: 1;">
+        <div class="e0">
+            <div>Day Time</div>
+            <div class="e1">
+                <div class="e2" id="day-slider"></div>
+            </div>
+        </div>
+        <div class="e0">
+            <div>Active Day</div>
+            <div class="e1">
+                <div class="e2" id="active-day-slider"></div>
+            </div>
+        </div>
+        <div class="e0">
+            <div>Free Time</div>
+            <div class="e1">
+                <div class="e2" id="free-time-slider"></div>
+            </div>
+        </div>
+        <div class="e0">
+            <div>Job</div>
+            <div class="e1">
+                <div class="e2" id="job-slider"></div>
+            </div>
+        </div>
+        <div class="e0">
+            <div>Sleep</div>
+            <div class="e1">
+                <div class="e2" id="sleep-slider"></div>
+            </div>
+        </div>
+    </div>
+    <div id="output"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        var CurrentDateAndTime = new Date();
+        let CurrentTimeHours = CurrentDateAndTime.getHours();
+        let CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
+
+        // var CurrentTimeHours = 22;
+        // var CurrentTimeMinutes = 59;
+
+        function main() {
+
+            let CurrentTimeHoursDecimal = Number((CurrentTimeHours * 100));
+            CurrentTimeMinutes++;
+            let CurrentTimeMinutesDecimal = Number(((CurrentTimeMinutes / 60) * 100).toFixed(2));
+            let CurrentTimeHoursMinutes = CurrentTimeHoursDecimal + CurrentTimeMinutesDecimal;
+            let DayTimeShare = (CurrentTimeHoursMinutes / 2400 * 100).toFixed(2);
+
+            let DayStartsAt = 700;
+            let DayEndsAt = 2300;
+
+            let JobStartsAt = 1300;
+            let JobEndsAt = 2250;
+
+            let FreeTimeStartsAt = 700;
+            let FreeTimeEndsAt = 1300;
+
+            var JobTimeShare = 0;
+            var ActiveTimeShare = 0;
+            var FreeTimeShare = 0;
+            var SleepTimeShare = 0;
+
+            if (CurrentTimeHoursMinutes >= JobStartsAt && CurrentTimeHoursMinutes <= JobEndsAt) {
+                JobTimeShare = ((CurrentTimeHoursMinutes - JobStartsAt) / (JobEndsAt - JobStartsAt) * 100).toFixed(2);
+            }
+            $("#job-slider").width(JobTimeShare + "%");
+
+            if (CurrentTimeHoursMinutes >= DayStartsAt && CurrentTimeHoursMinutes <= DayEndsAt) {
+                ActiveTimeShare = ((CurrentTimeHoursMinutes - DayStartsAt) / (DayEndsAt - DayStartsAt) * 100).toFixed(2);
+            }
+            $("#active-day-slider").width(ActiveTimeShare + "%");
+            if (CurrentTimeHoursMinutes >= FreeTimeStartsAt && CurrentTimeHoursMinutes <= FreeTimeEndsAt) {
+                FreeTimeShare = ((CurrentTimeHoursMinutes - FreeTimeStartsAt) / (FreeTimeEndsAt - FreeTimeStartsAt) * 100).toFixed(2);
+            }
+            $("#free-time-slider").width(FreeTimeShare + "%");
+
+            if (CurrentTimeHoursMinutes >= 2300 || CurrentTimeHoursMinutes < 700) {
+                if (CurrentTimeHoursMinutes >= 2300) {
+                    SleepTimeShare = ((CurrentTimeHoursMinutes - 2300) / (800) * 100).toFixed(2);
+                } else {
+                    SleepTimeShare = ((CurrentTimeHoursMinutes) / (700) * 100).toFixed(2) + 100;
+                }
+            }
+            $("#sleep-slider").width(SleepTimeShare + "%");
+
+            $("#day-slider").width(DayTimeShare + "%");
+
+
+            $("#output").append(`
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Day</td>
+                    <td>${DayTimeShare}%</td>
+                </tr>
+                <tr>
+                    <td>Free Time</td>
+                    <td>${FreeTimeShare}%</td>
+                </tr>
+                <tr>
+                    <td>Job</td>
+                    <td>${JobTimeShare}%</td>
+                </tr>
+                <tr>
+                    <td>Active Day</td>
+                    <td>${ActiveTimeShare}%</td>
+                </tr>
+                <tr>
+                    <td>Sleep</td>
+                    <td>${SleepTimeShare}%</td>
+                </tr>
+            `);
+        }
+
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
+        async function load() {
+            for (let i = 0; i < 24; i++) {
+                CurrentTimeHours = i;
+                for (let j = 0; j < 60; j++) {
+                    CurrentTimeMinutes = j;
+                    main();
+                    await sleep(2);
+                    if (j == 59 && i == 23) {
+                        // i = 22;
+                        // j = 0;
+                        window.location.reload();
+                    }
+                }
+            }
+        }
+
+        // load();
+        setTimeout(() => {
+            var CurrentTimeHours = CurrentDateAndTime.getHours();
+            var CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
+            main();
+        }, 500);
+
+        // var i = 0;
+        // var j = 0;
+
+        // while (i < 23) {
+        //     CurrentTimeHours = i;
+        //     console.log(CurrentTimeHours);
+        //     while (j < 59) {
+        //         CurrentTimeMinutes = j;
+        //         console.log(CurrentTimeMinutes);
+        //         console.log("j");
+        //         main();
+
+        //         // setTimeout(() => {
+        //             j++;
+        //         // }, 500);
+        //     }
+        //     console.log("i");
+        //     i++;
+        // }
+
+        // for (let i = 0; i < 24; i++) {
+        //     for (let j = 0; j < 60; j++) {
+        //         sleep(500).then(() => {
+        //             main();
+        //         });
+        //     }
+        // }
+
+
+    </script>
+</body>
+
+</html>
