@@ -62,7 +62,10 @@
             font-size: 14px;
             flex-grow: 1;
         }
-        td,th {
+
+        td,
+        th {
+            width: 50%;
             border: 1px solid rgba(255, 255, 255, 0.5);
             padding: 2px 6px;
         }
@@ -109,19 +112,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
-        var CurrentDateAndTime = new Date();
-        let CurrentTimeHours = CurrentDateAndTime.getHours();
-        let CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
+        // let CurrentTimeHours = CurrentDateAndTime.getHours();
+        // let CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
+        var CurrentDateAndTime;
+        var CurrentTimeHours = 0;
+        var CurrentTimeMinutes = 0;
 
-        // var CurrentTimeHours = 22;
-        // var CurrentTimeMinutes = 59;
+
 
         function main() {
 
-            let CurrentTimeHoursDecimal = Number((CurrentTimeHours * 100));
+            var CurrentTimeHoursDecimal = Number((CurrentTimeHours * 100));
             CurrentTimeMinutes++;
-            let CurrentTimeMinutesDecimal = Number(((CurrentTimeMinutes / 60) * 100).toFixed(2));
-            let CurrentTimeHoursMinutes = CurrentTimeHoursDecimal + CurrentTimeMinutesDecimal;
+            var CurrentTimeMinutesDecimal = Number(((CurrentTimeMinutes / 60) * 100).toFixed(2));
+            var CurrentTimeHoursMinutes = CurrentTimeHoursDecimal + CurrentTimeMinutesDecimal;
             let DayTimeShare = (CurrentTimeHoursMinutes / 2400 * 100).toFixed(2);
 
             let DayStartsAt = 700;
@@ -133,10 +137,10 @@
             let FreeTimeStartsAt = 700;
             let FreeTimeEndsAt = 1300;
 
-            var JobTimeShare = 0;
-            var ActiveTimeShare = 0;
-            var FreeTimeShare = 0;
-            var SleepTimeShare = 0;
+            var JobTimeShare = CurrentTimeHoursMinutes > JobEndsAt ? 100 : 0;
+            var ActiveTimeShare = CurrentTimeHoursMinutes > DayEndsAt ? 100 : 0;
+            var FreeTimeShare = CurrentTimeHoursMinutes > FreeTimeEndsAt ? 100 : 0;
+            var SleepTimeShare = CurrentTimeHoursMinutes > 700 ? 100 : 0;
 
             if (CurrentTimeHoursMinutes >= JobStartsAt && CurrentTimeHoursMinutes <= JobEndsAt) {
                 JobTimeShare = ((CurrentTimeHoursMinutes - JobStartsAt) / (JobEndsAt - JobStartsAt) * 100).toFixed(2);
@@ -156,14 +160,14 @@
                 if (CurrentTimeHoursMinutes >= 2300) {
                     SleepTimeShare = ((CurrentTimeHoursMinutes - 2300) / (800) * 100).toFixed(2);
                 } else {
-                    SleepTimeShare = ((CurrentTimeHoursMinutes) / (700) * 100).toFixed(2) + 100;
+                    SleepTimeShare = Number((((CurrentTimeHoursMinutes + 100) / (800)) * 100).toFixed());
                 }
             }
             $("#sleep-slider").width(SleepTimeShare + "%");
 
             $("#day-slider").width(DayTimeShare + "%");
 
-
+            $("#output").empty();
             $("#output").append(`
             <table>
                 <tr>
@@ -214,9 +218,12 @@
         }
 
         // load();
-        setTimeout(() => {
-            var CurrentTimeHours = CurrentDateAndTime.getHours();
-            var CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
+        setInterval(() => {
+            // CurrentTimeHours = 0;
+            // CurrentTimeMinutes = 0;
+            CurrentDateAndTime = new Date();
+            CurrentTimeHours = CurrentDateAndTime.getHours();
+            CurrentTimeMinutes = CurrentDateAndTime.getMinutes();
             main();
         }, 500);
 
